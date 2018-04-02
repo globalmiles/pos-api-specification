@@ -1,0 +1,1030 @@
+﻿#%RAML 1.0
+title: Global Miles POS API
+version: 1.0
+baseUri: default
+baseUriParameters: {}
+documentation:
+- title: Global Miles POS API
+  content: "By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key. Ask us Please.\nBefore using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  \nDuring shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. \nPOS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .\n\nUse Your Mile(Bonus):\n\nAfter Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.\n\nCancel Payment with Miles:\nBy using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it ."
+securitySchemes:
+  auth:
+    type: OAuth 2.0
+    settings:
+      authorizationUri: ''
+      accessTokenUri: https://api.sandbox.globalmiles.com/oauth/token
+      authorizationGrants:
+      - client_credentials
+      scopes: []
+types:
+  CompleteBonusPaymentResponse:
+    example:
+      value:
+        returnCode: 0
+        returnDesc: ''
+    displayName: CompleteBonusPaymentResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0  Success, 1 and bigger than 1 unsuccessful
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: if success return is empty. if unsuccessful it returns error message
+        type: string
+  CancelBonusPaymentResponse:
+    example:
+      value:
+        returnCode: 0
+        returnDesc: ''
+    displayName: CancelBonusPaymentResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0  Success, 1 and bigger than 1 unsuccessful
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: if success return is empty. if unsuccessful it returns error message
+        type: string
+  GetBonusProvisionsRequest:
+    example:
+      value:
+        readCode: '{{gsm_number}}'
+        readCodeType: 1
+        OKCSicilNo: ABCDEFG123
+    displayName: GetBonusProvisionsRequest
+    description: ''
+    type: object
+    properties:
+      readCode:
+        required: true
+        displayName: readCode
+        description: Müşteri tanıma tercihi, Telefon numarası, QR code gibi
+        type: string
+      readCodeType:
+        required: true
+        displayName: readCodeType
+        description: '1: Telefon numarası, 2: Müşteri unique identifier, 3: Diğer'
+        type: string
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+  GetBonusProvisionsResponse:
+    displayName: GetBonusProvisionsResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0  Success, 1 and bigger than 1 unsuccessful
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: if success return is empty. if unsuccessful it returns error message
+        type: string
+      bonusProvisions:
+        required: true
+        displayName: bonusProvisions
+        type: array
+        items:
+          type: BonusProvision
+  BonusProvision:
+    displayName: BonusProvision
+    type: object
+    properties:
+      bonusPaymentProvisionId:
+        required: true
+        displayName: bonusPaymentProvisionId
+        description: Provision ID
+        type: string
+      usedBonusAmount:
+        required: true
+        displayName: usedBonusAmount
+        description: Used Bonus Amount
+        type: integer
+        format: int32
+      dateTime:
+        required: true
+        displayName: dateTime
+        description: Date/time
+        type: string
+  OAuthRequest:
+    example:
+      value:
+        client_id: '{{client_id}}'
+        client_secret: '{{client_secret}}'
+        grant_type: '{{grant_type}}'
+    displayName: OAuthRequest
+    description: Representing an OAuth request.
+    type: object
+    properties:
+      client_id:
+        required: true
+        displayName: client_id
+        description: ID of the client which is provided by Global Miles.
+        type: string
+      client_secret:
+        required: true
+        displayName: client_secret
+        description: Secret of the client which is provided by Global Miles.
+        type: string
+      grant_type:
+        required: true
+        displayName: grant_type
+        description: 'Type of the OAuth flows. We support only one type of token: client_credentials'
+        type: string
+  OAuthResponse:
+    example:
+      value:
+        access_token: '{{access_token}}'
+        token_type: bearer
+        created_at: 1496737098
+    displayName: OAuthResponse
+    description: Representing an OAuth response.
+    type: object
+    properties:
+      access_token:
+        required: true
+        displayName: access_token
+        description: An access token from the authorization server.
+        type: string
+      token_type:
+        required: true
+        displayName: token_type
+        description: The type of token this is, typically just the string "bearer".
+        type: string
+      created_at:
+        required: true
+        displayName: created_at
+        description: The time in unix time format when the access token was created.
+        type: string
+  TransactionResultRequest:
+    example:
+      value:
+        totalReceiptAmount: 2000
+        totalVATAmount: 1000
+        OKCSicilNo: JH20085055
+        ReceiptNo: 0007
+        Zno: 15
+        EkuNo: 03
+        recognitionId: 197
+        ReceiptType: 1
+        ReceiptDateTime: 150420171530
+        InvoiceInfo:
+          invoiceType: 0
+          invoiceNo: 17
+          invoiceDate: 15.04.2017
+        Payments:
+        - payAmount: 2000
+          paymentType: 1
+        Discounts:
+        - orijin: ''
+          type: ''
+          value: ''
+    displayName: TransactionResultRequest
+    type: object
+    properties:
+      totalReceiptAmount:
+        required: true
+        displayName: totalReceiptAmount
+        description: Total Receipt Amount  ex:12.35 TL == 1235
+        type: integer
+        format: int32
+      totalVATAmount:
+        required: true
+        displayName: totalVATAmount
+        description: 'Total VAT Amount  ex: 0.85 TL == 85'
+        type: integer
+        format: int32
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+      ReceiptNo:
+        required: true
+        displayName: ReceiptNo
+        description: ReceiptNo
+        type: integer
+        format: int32
+      Zno:
+        required: true
+        displayName: Zno
+        description: Z no
+        type: integer
+        format: int32
+      recognitionId:
+        required: true
+        displayName: recognitionId
+        description: session based İdentification Number .
+        type: integer
+        format: int32
+      EkuNo:
+        required: true
+        displayName: EkuNo
+        description: Eku no(Electronic Journal)
+        type: integer
+        format: int32
+      ReceiptType:
+        required: true
+        displayName: ReceiptType
+        description: Receipt Type (Invoice , Food ..)
+        type: string
+      ReceiptDateTime:
+        required: true
+        displayName: ReceiptDateTime
+        description: it should be  GGAAYYYYSSDD formated.
+        type: string
+      InvoiceInfo:
+        required: true
+        displayName: InvoiceInfo
+        description: Invoice detail info
+        type: Invoice
+      Payments:
+        required: true
+        displayName: Payments
+        description: Payment Detail Block
+        type: array
+        items:
+          type: Payment
+      Discounts:
+        required: true
+        displayName: Discounts
+        type: array
+        items:
+          type: Discount
+  StartBonusPaymentRequest:
+    example:
+      value:
+        totalReceiptAmount: 600
+        totalBonusAmount: 300
+        recognitionId: 8
+        OKCSicilNo: ABCDEFG123
+    displayName: StartBonusPaymentRequest
+    type: object
+    properties:
+      totalReceiptAmount:
+        required: true
+        displayName: totalReceiptAmount
+        description: Total Receipt Amount  ex:12.35 TL == 1235
+        type: integer
+        format: int32
+      totalBonusAmount:
+        required: true
+        displayName: totalBonusAmount
+        description: Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85
+        type: integer
+        format: int32
+      recognitionId:
+        required: true
+        displayName: recognitionId
+        description: Session based user identification number
+        type: integer
+        format: int32
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+  CancelBonusPaymentRequest:
+    example:
+      value:
+        bonusPaymentProvisionId: 2
+        OKCSicilNo: ABCDEFG123
+    displayName: CancelBonusPaymentRequest
+    type: object
+    properties:
+      bonusPaymentProvisionId:
+        required: true
+        displayName: bonusPaymentProvisionId
+        description: Provision ID
+        type: string
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+  GetCustomerInfoResponse:
+    example:
+      value:
+        returnCode: 0
+        returnDesc: ''
+        recognitionId: 860444800
+        availablePoint: 0
+        loyaltyDiscountedPrice: 9000
+    displayName: GetCustomerInfoResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0 ise başarılı, 1 veya daha büyük ise başarısız
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
+        type: string
+      recognitionId:
+        required: true
+        displayName: recognitionId
+        description: Kullanıcının GlobalMiles sistemindeki unique identifier değeri
+        type: integer
+        format: int32
+      availablePoint:
+        required: true
+        displayName: availablePoint
+        description: 'Müşterinin bu işlemde kullanabileceği puanın TL karşılığıdır. Son iki karakter kuruşları temsil eder. Örneğin: 12.56 TL == 1256'
+        type: integer
+        format: int32
+      loyaltyDiscountedPrice:
+        required: true
+        displayName: loyaltyDiscountedPrice
+        description: 'Sadakat indirimi. Son iki karakter kuruşları temsil eder. Örneğin: 90.50 TL == 9050'
+        type: integer
+        format: int32
+  GetCustomerInfoRequest:
+    example:
+      value:
+        readCode: '{{GSM_NUMBER}}'
+        readCodeType: 1
+        totalAmount: 10000
+        totalVATAmount: 1000
+        OKCSicilNo: ABCDEFG123
+    displayName: GetCustomerInfoRequest
+    type: object
+    properties:
+      readCode:
+        required: true
+        displayName: readCode
+        description: Customer Identification Method ; GSM NO, Customer Unique ID or CODE
+        type: string
+      readCodeType:
+        required: true
+        displayName: readCodeType
+        description: '1: GSM NO, 2: Customer unique identifier, 3: CODE'
+        type: integer
+        format: int32
+      totalAmount:
+        required: true
+        displayName: totalAmount
+        description: Total receipt amount.  ex:12.34 TL == 1234
+        type: integer
+        format: int32
+      totalVATAmount:
+        required: true
+        displayName: totalVATAmount
+        description: Total Tax Value. EX:1.34 TL == 134
+        type: integer
+        format: int32
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+  Discount:
+    example:
+      value:
+        orijin: ''
+        type: ''
+        value: ''
+    displayName: Discount
+    type: object
+    properties:
+      orijin:
+        required: true
+        displayName: orijin
+        type: string
+      type:
+        required: true
+        displayName: type
+        type: string
+      value:
+        required: true
+        displayName: value
+        type: string
+  Payment:
+    example:
+      value:
+        payAmount: 2000
+        paymentType: 1
+    displayName: Payment
+    type: object
+    properties:
+      payAmount:
+        required: true
+        displayName: payAmount
+        type: integer
+        format: int32
+      paymentType:
+        required: true
+        displayName: paymentType
+        type: integer
+        format: int32
+  Invoice:
+    example:
+      value:
+        invoiceType: 0
+        invoiceNo: 17
+        invoiceDate: 15.04.2017
+    displayName: Invoice
+    type: object
+    properties:
+      invoiceType:
+        required: true
+        displayName: invoiceType
+        type: string
+      invoiceNo:
+        required: true
+        displayName: invoiceNo
+        type: string
+      invoiceDate:
+        required: true
+        displayName: invoiceDate
+        type: string
+  TransactionResultResponse:
+    example:
+      value:
+        returnCode: 0
+        returnDesc: ''
+    displayName: TransactionResultResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0 ise başarılı, 1 veya daha büyük ise başarısız
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
+        type: string
+  StartBonusPaymentResponse:
+    example:
+      value:
+        returnCode: 0
+        returnDesc: ''
+        bonusPaymentProvisionId: 4
+        OTPNeeded: True
+    displayName: StartBonusPaymentResponse
+    type: object
+    properties:
+      returnCode:
+        required: true
+        displayName: returnCode
+        description: 0 ise başarılı, 1 veya daha büyük ise başarısız
+        type: integer
+        format: int32
+      returnDesc:
+        required: true
+        displayName: returnDesc
+        description: Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
+        type: string
+      bonusPaymentProvisionId:
+        required: true
+        displayName: bonusPaymentProvisionId
+        description: Provizyon ID
+        type: string
+      OTPNeeded:
+        required: true
+        displayName: OTPNeeded
+        description: Tek kullanımlık parola gerekli mi?
+        type: boolean
+  CompleteBonusPaymentRequest:
+    example:
+      value:
+        bonusPaymentProvisionId: 3
+        OKCSicilNo: ABCDEFG123
+        OTP: 3202
+    displayName: CompleteBonusPaymentRequest
+    type: object
+    properties:
+      bonusPaymentProvisionId:
+        required: true
+        displayName: bonusPaymentProvisionId
+        description: Provision ID
+        type: string
+      OTP:
+        required: true
+        displayName: OTP
+        description: One time password that sends to customer phone
+        type: string
+      OKCSicilNo:
+        required: true
+        displayName: OKCSicilNo
+        description: Terminal code.
+        type: string
+/oauth/token:
+  post:
+    displayName: Authentication
+    description: 'An access token will allow you to make requests for the system. We support only one type of token: client_credentials'
+    body:
+      application/json:
+        example:
+          value:
+            client_id: 4b426d0f24705e018dffbe907238778cfd6c9b7c601fbd94cc00a5849e5757f5
+            client_secret: 89e2b197ac05d60a59f4835051f76fb69706e2196201bed5ee92531c9c54936f
+            grant_type: client_credentials
+        displayName: Body
+        description: The body of the request.
+        type: OAuthRequest
+    headers:
+      Accept:
+        required: true
+        default: application/json
+        example:
+          value: application/json
+        displayName: Accept
+        description: It advertises which content type is able to understand.
+        type: string
+      Content-Type:
+        required: true
+        default: application/json
+        example:
+          value: application/json
+        displayName: Content-Type
+        description: It tells the client what the content type of the returned.
+        type: string
+    responses:
+      200:
+        description: Success
+        body:
+          application/json:
+            example:
+              value:
+                access_token: 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+                token_type: bearer
+                created_at: 1496737098
+            displayName: response
+            type: OAuthResponse
+      400:
+        description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+        body: {}
+      401:
+        description: Unauthorized - No valid API key provided.
+        body: {}
+      402:
+        description: Request Failed - The parameters were valid but the request failed.
+        body: {}
+      404:
+        description: Not Found - The requested resource doesn't exist.
+        body: {}
+      429:
+        description: Too Many Requests - Too many requests hit the API too quickly.
+        body: {}
+      500:
+        description: Server Error - Something went wrong.
+        body: {}
+/v1/pos:
+  /TransactionResult:
+    post:
+      displayName: Transaction Result
+      description: After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+      body:
+        application/json:
+          example:
+            value:
+              totalReceiptAmount: 2000
+              totalVATAmount: 1000
+              OKCSicilNo: JH20085055
+              ReceiptNo: 0007
+              Zno: 15
+              EkuNo: 03
+              recognitionId: 197
+              ReceiptType: 1
+              ReceiptDateTime: 150420171530
+              InvoiceInfo:
+                invoiceType: 0
+                invoiceNo: 17
+                invoiceDate: 15.04.2017
+              Payments:
+              - payAmount: 2000
+                paymentType: 1
+              Discounts:
+              - orijin: ''
+                type: ''
+                value: ''
+          displayName: Body
+          description: The body of the request.
+          type: TransactionResultRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  returnCode: 0
+                  returnDesc: ''
+              displayName: response
+              type: TransactionResultResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}
+  /GetCustomerInfo:
+    post:
+      displayName: Get Customer Info
+      description: This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+      body:
+        application/json:
+          example:
+            value:
+              readCode: 5929000000
+              readCodeType: 1
+              totalAmount: 1000
+              totalVATAmount: 8
+              OKCSicilNo: JH20085055
+          displayName: Body
+          description: The body of the request.
+          type: GetCustomerInfoRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  returnCode: 0
+                  returnDesc: ''
+                  recognitionId: 197
+                  availablePoint: 350
+                  loyaltyDiscountedPrice: 1000
+              displayName: response
+              type: GetCustomerInfoResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}
+  /StartBonusPayment:
+    post:
+      displayName: Start Bonus Payment
+      description: |
+        After getting customer info's and RecognitionID to start Payment with Miles Use this API.
+
+        After calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.
+      body:
+        application/json:
+          example:
+            value:
+              totalReceiptAmount: 1000
+              totalBonusAmount: 300
+              recognitionId: 197
+              OKCSicilNo: JH20085055
+          displayName: Body
+          description: The body of the request.
+          type: StartBonusPaymentRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  returnCode: 0
+                  returnDesc: ''
+                  bonusPaymentProvisionId: 4
+                  OTPNeeded: True
+              displayName: response
+              type: StartBonusPaymentResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}
+  /CompleteBonusPayment:
+    post:
+      displayName: Complete Bonus Payment
+      description: In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.
+      body:
+        application/json:
+          example:
+            value:
+              bonusPaymentProvisionId: 3
+              OKCSicilNo: JH20085055
+              OTP: 3202
+          displayName: Body
+          description: The body of the request.
+          type: CompleteBonusPaymentRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  returnCode: 0
+                  returnDesc: ''
+              displayName: response
+              type: CompleteBonusPaymentResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}
+  /CancelBonusPayment:
+    post:
+      displayName: Cancel Bonus Payment
+      description: In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+      body:
+        application/json:
+          example:
+            value:
+              bonusPaymentProvisionId: 2
+              OKCSicilNo: JH20085055
+          displayName: Body
+          description: The body of the request.
+          type: CancelBonusPaymentRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              example:
+                value:
+                  returnCode: 0
+                  returnDesc: ''
+              displayName: response
+              type: CancelBonusPaymentResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}
+  /GetBonusProvisions:
+    post:
+      displayName: Get Bonus Provisions
+      description: Before cancelling the payment with Miles this API is used to list the related sale.
+      body:
+        application/json:
+          example:
+            value:
+              readCode: 5929000000
+              readCodeType: 1
+              OKCSicilNo: JH20085055
+          displayName: Body
+          description: The body of the request.
+          type: GetBonusProvisionsRequest
+      securedBy:
+      - auth
+      headers:
+        Accept:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Accept
+          description: It advertises which content type is able to understand.
+          type: string
+        Content-Type:
+          required: true
+          default: application/json
+          example:
+            value: application/json
+          displayName: Content-Type
+          description: It tells the client what the content type of the returned.
+          type: string
+        Authorization:
+          required: true
+          example:
+            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+          displayName: Authorization
+          description: It includes OAuth2 token.
+          type: string
+      responses:
+        200:
+          description: Success
+          body:
+            application/json:
+              displayName: response
+              type: GetBonusProvisionsResponse
+        400:
+          description: Bad Request	- The request was unacceptable, often due to missing a required parameter.
+          body: {}
+        401:
+          description: Unauthorized - No valid API key provided.
+          body: {}
+        402:
+          description: Request Failed - The parameters were valid but the request failed.
+          body: {}
+        404:
+          description: Not Found - The requested resource doesn't exist.
+          body: {}
+        429:
+          description: Too Many Requests - Too many requests hit the API too quickly.
+          body: {}
+        500:
+          description: Server Error - Something went wrong.
+          body: {}

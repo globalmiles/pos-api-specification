@@ -1,0 +1,713 @@
+﻿FORMAT: 1A
+HOST: https://api.sandbox.globalmiles.com
+
+# Global Miles POS API
+By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.
+
+
+
+Work Flow:
+
+Common to dos both for Earn/Pay with miles. 
+
+
+
+We will provide Client ID/ Secret Key. Ask us Please.
+
+Before using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  
+
+During shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. 
+
+POS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. 
+
+
+
+Earn Mile: 
+
+After Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .
+
+
+
+Use Your Mile(Bonus):
+
+
+
+After Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .
+
+
+
+An OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.
+
+
+
+Cancel Payment with Miles:
+
+By using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .
+
+## Authentication
+This API uses OAuth v2 Client Credentials Grant for its authentication.
+
+The properties required for this OAuth implentation are as follows:
++ Access Token Url - /oauth/token
+
+# Group Payment Systems
+
+## V1 Pos TransactionResult [/v1/pos/TransactionResult]
+
+### Transaction Result [POST]
+After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (TransactionResultRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (TransactionResultResponse)
+
+    + Body
+
+            {
+              "returnCode": 0,
+              "returnDesc": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+
+# Group Authentication
+
+## Oauth Token [/oauth/token]
+
+### Authentication [POST]
+An access token will allow you to make requests for the system. We support only one type of token: client_credentials
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+
+    + Attributes (OAuthRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (OAuthResponse)
+
+    + Body
+
+            {
+              "access_token":"4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
+              "token_type":"bearer",
+              "created_at":"1496737098"
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+
+# Group Common
+
+## V1 Pos GetCustomerInfo [/v1/pos/GetCustomerInfo]
+
+### Get Customer Info [POST]
+This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (GetCustomerInfoRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (GetCustomerInfoResponse)
+
+    + Body
+
+            {
+              "returnCode": 0,
+              "returnDesc": "",
+              "recognitionId": 197,
+              "availablePoint": 350,
+              "loyaltyDiscountedPrice": 1000
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+
+# Group Bonus Payments
+
+## V1 Pos StartBonusPayment [/v1/pos/StartBonusPayment]
+
+### Start Bonus Payment [POST]
+After getting customer info's and RecognitionID to start Payment with Miles Use this API.
+
+After calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (StartBonusPaymentRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (StartBonusPaymentResponse)
+
+    + Body
+
+            {
+              "returnCode": 0,
+              "returnDesc": "",
+              "bonusPaymentProvisionId": 4,
+              "OTPNeeded": true
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V1 Pos CompleteBonusPayment [/v1/pos/CompleteBonusPayment]
+
+### Complete Bonus Payment [POST]
+In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (CompleteBonusPaymentRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (CompleteBonusPaymentResponse)
+
+    + Body
+
+            {
+              "returnCode": 0,
+              "returnDesc": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V1 Pos CancelBonusPayment [/v1/pos/CancelBonusPayment]
+
+### Cancel Bonus Payment [POST]
+In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (CancelBonusPaymentRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (CancelBonusPaymentResponse)
+
+    + Body
+
+            {
+              "returnCode": 0,
+              "returnDesc": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V1 Pos GetBonusProvisions [/v1/pos/GetBonusProvisions]
+
+### Get Bonus Provisions [POST]
+Before cancelling the payment with Miles this API is used to list the related sale.
+
++ Request (application/json)
+    + Headers
+
+            Accept:application/json
+            Authorization:bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
+
+    + Attributes (GetBonusProvisionsRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (GetBonusProvisionsResponse)
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+
+# Data Structures
+
+## CompleteBonusPaymentResponse (object)
+
+
+### Properties
++ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
+
+
+## CancelBonusPaymentResponse (object)
+
+
+### Properties
++ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
+
+
+## GetBonusProvisionsRequest (object)
+
+
+### Properties
++ `readCode`: `{{gsm_number}}` (string, required) - Müşteri tanıma tercihi, Telefon numarası, QR code gibi
++ `readCodeType`: `"1"` (string, required) - 1: Telefon numarası, 2: Müşteri unique identifier, 3: Diğer
++ `OKCSicilNo`: `"ABCDEFG123"` (string, required) - Terminal code.
+
+
+## GetBonusProvisionsResponse (object)
+
+
+### Properties
++ `returnCode` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
++ `bonusProvisions` (array[BonusProvision], required) 
+
+
+## BonusProvision (object)
+
+
+### Properties
++ `bonusPaymentProvisionId` (string, required) - Provision ID
++ `usedBonusAmount` (number, required) - Used Bonus Amount
++ `dateTime` (string, required) - Date/time
+
+
+## OAuthRequest (object)
+Representing an OAuth request.
+
+### Properties
++ `client_id`: `{{client_id}}` (string, required) - ID of the client which is provided by Global Miles.
++ `client_secret`: `{{client_secret}}` (string, required) - Secret of the client which is provided by Global Miles.
++ `grant_type`: `{{grant_type}}` (string, required) - Type of the OAuth flows. We support only one type of token: client_credentials
+
+
+## OAuthResponse (object)
+Representing an OAuth response.
+
+### Properties
++ `access_token`: `{{access_token}}` (string, required) - An access token from the authorization server.
++ `token_type`: `bearer` (string, required) - The type of token this is, typically just the string "bearer".
++ `created_at`: `1496737098` (string, required) - The time in unix time format when the access token was created.
+
+
+## TransactionResultRequest (object)
+
+
+### Properties
++ `totalReceiptAmount` (number, required) - Total Receipt Amount  ex:12.35 TL == 1235
++ `totalVATAmount` (number, required) - Total VAT Amount  ex: 0.85 TL == 85
++ `OKCSicilNo` (string, required) - Terminal code.
++ `ReceiptNo` (number, required) - ReceiptNo
++ `Zno` (number, required) - Z no
++ `recognitionId` (number, required) - session based İdentification Number .
++ `EkuNo` (number, required) - Eku no(Electronic Journal)
++ `ReceiptType` (string, required) - Receipt Type (Invoice , Food ..)
++ `ReceiptDateTime` (string, required) - it should be  GGAAYYYYSSDD formated.
++ `InvoiceInfo` (Invoice, required) - Invoice detail info
++ `Payments` (array[Payment], required) - Payment Detail Block
++ `Discounts` (array[Discount], required) 
+
+
+## StartBonusPaymentRequest (object)
+
+
+### Properties
++ `totalReceiptAmount`: `300` (number, required) - Total Receipt Amount  ex:12.35 TL == 1235
++ `totalBonusAmount`: `600` (number, required) - Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85
++ `recognitionId`: `8` (number, required) - Session based user identification number
++ `OKCSicilNo`: `8` (string, required) - Terminal code.
+
+
+## CancelBonusPaymentRequest (object)
+
+
+### Properties
++ `bonusPaymentProvisionId`: `"2"` (string, required) - Provision ID
++ `OKCSicilNo`: `"ABCDEFG123"` (string, required) - Terminal code.
+
+
+## GetCustomerInfoResponse (object)
+
+
+### Properties
++ `returnCode`: `0` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
++ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
++ `recognitionId`: `860444800` (number, required) - Kullanıcının GlobalMiles sistemindeki unique identifier değeri
++ `availablePoint`: `0` (number, required) - Müşterinin bu işlemde kullanabileceği puanın TL karşılığıdır. Son iki karakter kuruşları temsil eder. Örneğin: 12.56 TL == 1256
++ `loyaltyDiscountedPrice`: `9000` (number, required) - Sadakat indirimi. Son iki karakter kuruşları temsil eder. Örneğin: 90.50 TL == 9050
+
+
+## GetCustomerInfoRequest (object)
+
+
+### Properties
++ `readCode`: `{{GSM_NUMBER}}` (string, required) - Customer Identification Method ; GSM NO, Customer Unique ID or CODE
++ `readCodeType`: `1` (number, required) - 1: GSM NO, 2: Customer unique identifier, 3: CODE
++ `totalAmount`: `10000` (number, required) - Total receipt amount.  ex:12.34 TL == 1234
++ `totalVATAmount`: `1000` (number, required) - Total Tax Value. EX:1.34 TL == 134
++ `OKCSicilNo`: `ABCDEFG123` (string, required) - Terminal code.
+
+
+## Discount (object)
+
+
+### Properties
++ `orijin` (string, required) 
++ `type` (string, required) 
++ `value` (string, required) 
+
+
+## Payment (object)
+
+
+### Properties
++ `payAmount`: `2000` (number, required) 
++ `paymentType`: `1` (number, required) 
+
+
+## Invoice (object)
+
+
+### Properties
++ `invoiceType`: `0` (string, required) 
++ `invoiceNo`: `17` (string, required) 
++ `invoiceDate`: `15.04.2017` (string, required) 
+
+
+## TransactionResultResponse (object)
+
+
+### Properties
++ `returnCode` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
++ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
+
+
+## StartBonusPaymentResponse (object)
+
+
+### Properties
++ `returnCode`: `0` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
++ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
++ `bonusPaymentProvisionId`: `"4"` (string, required) - Provizyon ID
++ `OTPNeeded`: `true` (boolean, required) - Tek kullanımlık parola gerekli mi?
+
+
+## CompleteBonusPaymentRequest (object)
+
+
+### Properties
++ `bonusPaymentProvisionId`: `"3"` (string, required) - Provision ID
++ `OTP`: `"3202"` (string, required) - One time password that sends to customer phone
++ `OKCSicilNo`: `"ABCDEFG123"` (string, required) - Terminal code.
+

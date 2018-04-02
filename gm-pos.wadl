@@ -1,0 +1,855 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://wadl.dev.java.net/2009/02" xmlns:tns="default/schemas">
+  <doc title="Global Miles POS API" xml:lang="en">By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.
+
+Work Flow:
+Common to dos both for Earn/Pay with miles. 
+
+We will provide Client ID/ Secret Key. Ask us Please.
+Before using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  
+During shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. 
+POS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. 
+
+Earn Mile: 
+After Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .
+
+Use Your Mile(Bonus):
+
+After Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .
+
+An OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.
+
+Cancel Payment with Miles:
+By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .</doc>
+  <grammars>
+    <xs:schema xmlns:tns="default/schemas" targetNamespace="default/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="CompleteBonusPaymentResponse" type="tns:CompleteBonusPaymentResponse" />
+      <xs:element name="CancelBonusPaymentResponse" type="tns:CancelBonusPaymentResponse" />
+      <xs:element name="GetBonusProvisionsRequest" type="tns:GetBonusProvisionsRequest" />
+      <xs:element name="GetBonusProvisionsResponse" type="tns:GetBonusProvisionsResponse" />
+      <xs:element name="BonusProvision" type="tns:BonusProvision" />
+      <xs:element name="OAuthRequest" type="tns:OAuthRequest" />
+      <xs:element name="OAuthResponse" type="tns:OAuthResponse" />
+      <xs:element name="TransactionResultRequest" type="tns:TransactionResultRequest" />
+      <xs:element name="StartBonusPaymentRequest" type="tns:StartBonusPaymentRequest" />
+      <xs:element name="CancelBonusPaymentRequest" type="tns:CancelBonusPaymentRequest" />
+      <xs:element name="GetCustomerInfoResponse" type="tns:GetCustomerInfoResponse" />
+      <xs:element name="GetCustomerInfoRequest" type="tns:GetCustomerInfoRequest" />
+      <xs:element name="Discount" type="tns:Discount" />
+      <xs:element name="Payment" type="tns:Payment" />
+      <xs:element name="Invoice" type="tns:Invoice" />
+      <xs:element name="TransactionResultResponse" type="tns:TransactionResultResponse" />
+      <xs:element name="StartBonusPaymentResponse" type="tns:StartBonusPaymentResponse" />
+      <xs:element name="CompleteBonusPaymentRequest" type="tns:CompleteBonusPaymentRequest" />
+      <xs:complexType name="CompleteBonusPaymentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CancelBonusPaymentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetBonusProvisionsRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="readCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Müşteri tanıma tercihi, Telefon numarası, QR code gibi</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="readCodeType">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>1: Telefon numarası, 2: Müşteri unique identifier, 3: Diğer</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetBonusProvisionsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="unbounded" name="bonusProvisions" type="tns:BonusProvision" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="BonusProvision">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="bonusPaymentProvisionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Provision ID</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="usedBonusAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Used Bonus Amount</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="dateTime">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Date/time</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="OAuthRequest">
+        <xs:annotation>
+          <xs:documentation>Representing an OAuth request.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="1" name="client_id">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>ID of the client which is provided by Global Miles.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="client_secret">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Secret of the client which is provided by Global Miles.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="grant_type">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Type of the OAuth flows. We support only one type of token: client_credentials</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="OAuthResponse">
+        <xs:annotation>
+          <xs:documentation>Representing an OAuth response.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="1" name="access_token">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>An access token from the authorization server.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="token_type">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>The type of token this is, typically just the string "bearer".</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="created_at">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>The time in unix time format when the access token was created.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TransactionResultRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="totalReceiptAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total Receipt Amount  ex:12.35 TL == 1235</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="totalVATAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total VAT Amount  ex: 0.85 TL == 85</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="ReceiptNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>ReceiptNo</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="Zno">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Z no</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="recognitionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>session based İdentification Number .</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="EkuNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Eku no(Electronic Journal)</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="ReceiptType">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Receipt Type (Invoice , Food ..)</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="ReceiptDateTime">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>it should be  GGAAYYYYSSDD formated.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="InvoiceInfo" type="tns:Invoice">
+            <xs:annotation>
+              <xs:documentation>Invoice detail info</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="unbounded" name="Payments" type="tns:Payment">
+            <xs:annotation>
+              <xs:documentation>Payment Detail Block</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" maxOccurs="unbounded" name="Discounts" type="tns:Discount" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="StartBonusPaymentRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="totalReceiptAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total Receipt Amount  ex:12.35 TL == 1235</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="totalBonusAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="recognitionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Session based user identification number</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CancelBonusPaymentRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="bonusPaymentProvisionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Provision ID</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetCustomerInfoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="recognitionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Kullanıcının GlobalMiles sistemindeki unique identifier değeri</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="availablePoint">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Müşterinin bu işlemde kullanabileceği puanın TL karşılığıdır. Son iki karakter kuruşları temsil eder. Örneğin: 12.56 TL == 1256</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="loyaltyDiscountedPrice">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Sadakat indirimi. Son iki karakter kuruşları temsil eder. Örneğin: 90.50 TL == 9050</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetCustomerInfoRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="readCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Customer Identification Method ; GSM NO, Customer Unique ID or CODE</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="readCodeType">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>1: GSM NO, 2: Customer unique identifier, 3: CODE</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="totalAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total receipt amount.  ex:12.34 TL == 1234</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="totalVATAmount">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Total Tax Value. EX:1.34 TL == 134</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Discount">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="orijin">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="type">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="value">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Payment">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="payAmount">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="paymentType">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Invoice">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="invoiceType">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="invoiceNo">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="invoiceDate">
+            <xs:simpleType>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TransactionResultResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="StartBonusPaymentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="returnCode">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:integer" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="returnDesc">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="bonusPaymentProvisionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Provizyon ID</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OTPNeeded" type="xs:boolean">
+            <xs:annotation>
+              <xs:documentation>Tek kullanımlık parola gerekli mi?</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CompleteBonusPaymentRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="bonusPaymentProvisionId">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Provision ID</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OTP">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>One time password that sends to customer phone</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OKCSicilNo">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </grammars>
+  <resources base="default">
+    <resource id="_v1posTransactionResult" path="/v1/pos/TransactionResult">
+      <method id="TransactionResult" name="POST">
+        <doc title="Transaction Result" xml:lang="en">After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:TransactionResultRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:TransactionResultResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_oauthtoken" path="/oauth/token">
+      <method id="Authentication" name="POST">
+        <doc title="Authentication" xml:lang="en">An access token will allow you to make requests for the system. We support only one type of token: client_credentials</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <representation element="tns:OAuthRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:OAuthResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_v1posGetCustomerInfo" path="/v1/pos/GetCustomerInfo">
+      <method id="GetCustomerInfo" name="POST">
+        <doc title="Get Customer Info" xml:lang="en">This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:GetCustomerInfoRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:GetCustomerInfoResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_v1posStartBonusPayment" path="/v1/pos/StartBonusPayment">
+      <method id="StartBonusPayment" name="POST">
+        <doc title="Start Bonus Payment" xml:lang="en">After getting customer info's and RecognitionID to start Payment with Miles Use this API.
+After calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:StartBonusPaymentRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:StartBonusPaymentResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_v1posCompleteBonusPayment" path="/v1/pos/CompleteBonusPayment">
+      <method id="CompleteBonusPayment" name="POST">
+        <doc title="Complete Bonus Payment" xml:lang="en">In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:CompleteBonusPaymentRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:CompleteBonusPaymentResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_v1posCancelBonusPayment" path="/v1/pos/CancelBonusPayment">
+      <method id="CancelBonusPayment" name="POST">
+        <doc title="Cancel Bonus Payment" xml:lang="en">In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:CancelBonusPaymentRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:CancelBonusPaymentResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+    <resource id="_v1posGetBonusProvisions" path="/v1/pos/GetBonusProvisions">
+      <method id="GetBonusProvisions" name="POST">
+        <doc title="Get Bonus Provisions" xml:lang="en">Before cancelling the payment with Miles this API is used to list the related sale.</doc>
+        <request>
+          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
+          </param>
+          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
+            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
+          </param>
+          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
+            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
+          </param>
+          <representation element="tns:GetBonusProvisionsRequest" mediaType="application/json" />
+        </request>
+        <response status="200">
+          <representation element="tns:GetBonusProvisionsResponse" mediaType="application/json" />
+        </response>
+        <response status="400">
+          <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
+        </response>
+        <response status="401">
+          <doc title="401" xml:lang="en">Unauthorized - No valid API key provided.</doc>
+        </response>
+        <response status="402">
+          <doc title="402" xml:lang="en">Request Failed - The parameters were valid but the request failed.</doc>
+        </response>
+        <response status="404">
+          <doc title="404" xml:lang="en">Not Found - The requested resource doesn't exist.</doc>
+        </response>
+        <response status="429">
+          <doc title="429" xml:lang="en">Too Many Requests - Too many requests hit the API too quickly.</doc>
+        </response>
+        <response status="500">
+          <doc title="500" xml:lang="en">Server Error - Something went wrong.</doc>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>
