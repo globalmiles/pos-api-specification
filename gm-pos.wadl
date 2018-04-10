@@ -265,7 +265,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="recognitionId">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>session based İdentification Number .</xs:documentation>
+                <xs:documentation>Session based Identification Number .</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -273,7 +273,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="EkuNo">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Eku no(Electronic Journal)</xs:documentation>
+                <xs:documentation>Eku no (Electronic Journal)</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -289,7 +289,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="ReceiptDateTime">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>it should be  GGAAYYYYSSDD formated.</xs:documentation>
+                <xs:documentation>It should be  GGAAYYYYSSDD formatted.</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -317,10 +317,10 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
           </xs:element>
-          <xs:element minOccurs="1" name="totalBonusAmount">
+          <xs:element minOccurs="1" name="usedBonusAmount">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85</xs:documentation>
+                <xs:documentation>Used Bonus(Mile) Amount that has been used in the shopping  ex:0.85 TL == 85</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -566,18 +566,18 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
               <xs:restriction base="xs:string" />
             </xs:simpleType>
           </xs:element>
-          <xs:element minOccurs="1" name="OTP">
-            <xs:simpleType>
-              <xs:annotation>
-                <xs:documentation>One time password that sends to customer phone</xs:documentation>
-              </xs:annotation>
-              <xs:restriction base="xs:string" />
-            </xs:simpleType>
-          </xs:element>
           <xs:element minOccurs="1" name="OKCSicilNo">
             <xs:simpleType>
               <xs:annotation>
                 <xs:documentation>Terminal code.</xs:documentation>
+              </xs:annotation>
+              <xs:restriction base="xs:string" />
+            </xs:simpleType>
+          </xs:element>
+          <xs:element minOccurs="1" name="OTP">
+            <xs:simpleType>
+              <xs:annotation>
+                <xs:documentation>One time password that sends to customer phone</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -589,17 +589,11 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
   <resources base="default">
     <resource id="_v1posTransactionResult" path="/v1/pos/TransactionResult">
       <method id="TransactionResult" name="POST">
-        <doc title="Transaction Result" xml:lang="en">After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.</doc>
+        <doc title="Transaction Result" xml:lang="en">After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:TransactionResultRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -629,12 +623,6 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
       <method id="Authentication" name="POST">
         <doc title="Authentication" xml:lang="en">An access token will allow you to make requests for the system. We support only one type of token: client_credentials</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
           <representation element="tns:OAuthRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -662,17 +650,11 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
     </resource>
     <resource id="_v1posGetCustomerInfo" path="/v1/pos/GetCustomerInfo">
       <method id="GetCustomerInfo" name="POST">
-        <doc title="Get Customer Info" xml:lang="en">This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.</doc>
+        <doc title="Get Customer Info" xml:lang="en">This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:GetCustomerInfoRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -701,17 +683,11 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
     <resource id="_v1posStartBonusPayment" path="/v1/pos/StartBonusPayment">
       <method id="StartBonusPayment" name="POST">
         <doc title="Start Bonus Payment" xml:lang="en">After getting customer info's and RecognitionID to start Payment with Miles Use this API.
-After calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.</doc>
+After calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:StartBonusPaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -739,17 +715,11 @@ After calling this API successfully OTP code send to cutomer GSM number. This OT
     </resource>
     <resource id="_v1posCompleteBonusPayment" path="/v1/pos/CompleteBonusPayment">
       <method id="CompleteBonusPayment" name="POST">
-        <doc title="Complete Bonus Payment" xml:lang="en">In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.</doc>
+        <doc title="Complete Bonus Payment" xml:lang="en">In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:CompleteBonusPaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -777,17 +747,11 @@ After calling this API successfully OTP code send to cutomer GSM number. This OT
     </resource>
     <resource id="_v1posCancelBonusPayment" path="/v1/pos/CancelBonusPayment">
       <method id="CancelBonusPayment" name="POST">
-        <doc title="Cancel Bonus Payment" xml:lang="en">In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.</doc>
+        <doc title="Cancel Bonus Payment" xml:lang="en">In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:CancelBonusPaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
@@ -815,17 +779,11 @@ After calling this API successfully OTP code send to cutomer GSM number. This OT
     </resource>
     <resource id="_v1posGetBonusProvisions" path="/v1/pos/GetBonusProvisions">
       <method id="GetBonusProvisions" name="POST">
-        <doc title="Get Bonus Provisions" xml:lang="en">Before cancelling the payment with Miles this API is used to list the related sale.</doc>
+        <doc title="Get Bonus Provisions" xml:lang="en">Before cancelling the payment with Miles this API is used to list the related sale.
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <param name="Accept" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Accept" xml:lang="en">It advertises which content type is able to understand.</doc>
-          </param>
-          <param name="Content-Type" style="header" type="xsd:string" default="application/json" required="true">
-            <doc title="Content-Type" xml:lang="en">It tells the client what the content type of the returned.</doc>
-          </param>
-          <param name="Authorization" style="header" type="xsd:string" default="" required="true">
-            <doc title="Authorization" xml:lang="en">It includes OAuth2 token.</doc>
-          </param>
           <representation element="tns:GetBonusProvisionsRequest" mediaType="application/json" />
         </request>
         <response status="200">

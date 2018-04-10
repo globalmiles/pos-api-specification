@@ -57,9 +57,9 @@ types:
   GetBonusProvisionsRequest:
     example:
       value:
-        readCode: '{{gsm_number}}'
+        readCode: 5929000000
         readCodeType: 1
-        OKCSicilNo: ABCDEFG123
+        OKCSicilNo: JH20085055
     displayName: GetBonusProvisionsRequest
     description: ''
     type: object
@@ -123,9 +123,9 @@ types:
   OAuthRequest:
     example:
       value:
-        client_id: '{{client_id}}'
-        client_secret: '{{client_secret}}'
-        grant_type: '{{grant_type}}'
+        client_id: 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+        client_secret: d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
+        grant_type: client_credentials
     displayName: OAuthRequest
     description: Representing an OAuth request.
     type: object
@@ -228,13 +228,13 @@ types:
       recognitionId:
         required: true
         displayName: recognitionId
-        description: session based İdentification Number .
+        description: Session based Identification Number .
         type: integer
         format: int32
       EkuNo:
         required: true
         displayName: EkuNo
-        description: Eku no(Electronic Journal)
+        description: Eku no (Electronic Journal)
         type: integer
         format: int32
       ReceiptType:
@@ -245,7 +245,7 @@ types:
       ReceiptDateTime:
         required: true
         displayName: ReceiptDateTime
-        description: it should be  GGAAYYYYSSDD formated.
+        description: It should be  GGAAYYYYSSDD formatted.
         type: string
       InvoiceInfo:
         required: true
@@ -269,7 +269,7 @@ types:
     example:
       value:
         totalReceiptAmount: 600
-        totalBonusAmount: 300
+        usedBonusAmount: 300
         recognitionId: 8
         OKCSicilNo: ABCDEFG123
     displayName: StartBonusPaymentRequest
@@ -281,10 +281,10 @@ types:
         description: Total Receipt Amount  ex:12.35 TL == 1235
         type: integer
         format: int32
-      totalBonusAmount:
+      usedBonusAmount:
         required: true
-        displayName: totalBonusAmount
-        description: Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85
+        displayName: usedBonusAmount
+        description: Used Bonus(Mile) Amount that has been used in the shopping  ex:0.85 TL == 85
         type: integer
         format: int32
       recognitionId:
@@ -301,8 +301,8 @@ types:
   CancelBonusPaymentRequest:
     example:
       value:
-        bonusPaymentProvisionId: 2
-        OKCSicilNo: ABCDEFG123
+        bonusPaymentProvisionId: 206
+        OKCSicilNo: JH20085055
     displayName: CancelBonusPaymentRequest
     type: object
     properties:
@@ -359,11 +359,11 @@ types:
   GetCustomerInfoRequest:
     example:
       value:
-        readCode: '{{GSM_NUMBER}}'
+        readCode: 5929000000
         readCodeType: 1
         totalAmount: 10000
         totalVATAmount: 1000
-        OKCSicilNo: ABCDEFG123
+        OKCSicilNo: JH20085055
     displayName: GetCustomerInfoRequest
     type: object
     properties:
@@ -508,9 +508,9 @@ types:
   CompleteBonusPaymentRequest:
     example:
       value:
-        bonusPaymentProvisionId: 3
-        OKCSicilNo: ABCDEFG123
-        OTP: 3202
+        bonusPaymentProvisionId: 206
+        OKCSicilNo: JH20085055
+        OTP: 3636
     displayName: CompleteBonusPaymentRequest
     type: object
     properties:
@@ -519,15 +519,15 @@ types:
         displayName: bonusPaymentProvisionId
         description: Provision ID
         type: string
-      OTP:
-        required: true
-        displayName: OTP
-        description: One time password that sends to customer phone
-        type: string
       OKCSicilNo:
         required: true
         displayName: OKCSicilNo
         description: Terminal code.
+        type: string
+      OTP:
+        required: true
+        displayName: OTP
+        description: One time password that sends to customer phone
         type: string
 /oauth/token:
   post:
@@ -537,29 +537,12 @@ types:
       application/json:
         example:
           value:
-            client_id: 4b426d0f24705e018dffbe907238778cfd6c9b7c601fbd94cc00a5849e5757f5
-            client_secret: 89e2b197ac05d60a59f4835051f76fb69706e2196201bed5ee92531c9c54936f
+            client_id: 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+            client_secret: d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
             grant_type: client_credentials
         displayName: Body
         description: The body of the request.
         type: OAuthRequest
-    headers:
-      Accept:
-        required: true
-        default: application/json
-        example:
-          value: application/json
-        displayName: Accept
-        description: It advertises which content type is able to understand.
-        type: string
-      Content-Type:
-        required: true
-        default: application/json
-        example:
-          value: application/json
-        displayName: Content-Type
-        description: It tells the client what the content type of the returned.
-        type: string
     responses:
       200:
         description: Success
@@ -594,7 +577,13 @@ types:
   /TransactionResult:
     post:
       displayName: Transaction Result
-      description: After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+      description: |
+        After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
@@ -624,30 +613,6 @@ types:
           type: TransactionResultRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success
@@ -680,7 +645,13 @@ types:
   /GetCustomerInfo:
     post:
       displayName: Get Customer Info
-      description: This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+      description: |
+        This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
@@ -695,30 +666,6 @@ types:
           type: GetCustomerInfoRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success
@@ -757,13 +704,18 @@ types:
       description: |
         After getting customer info's and RecognitionID to start Payment with Miles Use this API.
 
-        After calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.
+        After calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
             value:
               totalReceiptAmount: 1000
-              totalBonusAmount: 300
+              usedBonusAmount: 300
               recognitionId: 197
               OKCSicilNo: JH20085055
           displayName: Body
@@ -771,30 +723,6 @@ types:
           type: StartBonusPaymentRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success
@@ -804,7 +732,7 @@ types:
                 value:
                   returnCode: 0
                   returnDesc: ''
-                  bonusPaymentProvisionId: 4
+                  bonusPaymentProvisionId: 205
                   OTPNeeded: True
               displayName: response
               type: StartBonusPaymentResponse
@@ -829,43 +757,25 @@ types:
   /CompleteBonusPayment:
     post:
       displayName: Complete Bonus Payment
-      description: In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.
+      description: |
+        In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
             value:
-              bonusPaymentProvisionId: 3
+              bonusPaymentProvisionId: 206
               OKCSicilNo: JH20085055
-              OTP: 3202
+              OTP: 3636
           displayName: Body
           description: The body of the request.
           type: CompleteBonusPaymentRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success
@@ -898,42 +808,24 @@ types:
   /CancelBonusPayment:
     post:
       displayName: Cancel Bonus Payment
-      description: In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+      description: |
+        In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
             value:
-              bonusPaymentProvisionId: 2
+              bonusPaymentProvisionId: 206
               OKCSicilNo: JH20085055
           displayName: Body
           description: The body of the request.
           type: CancelBonusPaymentRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success
@@ -966,7 +858,13 @@ types:
   /GetBonusProvisions:
     post:
       displayName: Get Bonus Provisions
-      description: Before cancelling the payment with Miles this API is used to list the related sale.
+      description: |
+        Before cancelling the payment with Miles this API is used to list the related sale.
+
+
+        You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+
+        and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
       body:
         application/json:
           example:
@@ -979,30 +877,6 @@ types:
           type: GetBonusProvisionsRequest
       securedBy:
       - auth
-      headers:
-        Accept:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Accept
-          description: It advertises which content type is able to understand.
-          type: string
-        Content-Type:
-          required: true
-          default: application/json
-          example:
-            value: application/json
-          displayName: Content-Type
-          description: It tells the client what the content type of the returned.
-          type: string
-        Authorization:
-          required: true
-          example:
-            value: bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c
-          displayName: Authorization
-          description: It includes OAuth2 token.
-          type: string
       responses:
         200:
           description: Success

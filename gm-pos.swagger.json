@@ -28,7 +28,7 @@
   "paths": {
     "/v1/pos/TransactionResult": {
       "post": {
-        "description": "After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.",
+        "description": "After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Transaction Result",
         "tags": [
           "Payment Systems"
@@ -38,27 +38,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -134,20 +113,6 @@
         ],
         "parameters": [
           {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
             "name": "Body",
             "in": "body",
             "required": true,
@@ -208,7 +173,7 @@
     },
     "/v1/pos/GetCustomerInfo": {
       "post": {
-        "description": "This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.",
+        "description": "This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Get Customer Info",
         "tags": [
           "Common"
@@ -218,27 +183,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -306,7 +250,7 @@
     },
     "/v1/pos/StartBonusPayment": {
       "post": {
-        "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale.",
+        "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Start Bonus Payment",
         "tags": [
           "Bonus Payments"
@@ -316,27 +260,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -357,7 +280,7 @@
               "application/json": {
                 "returnCode": 0,
                 "returnDesc": "",
-                "bonusPaymentProvisionId": 4,
+                "bonusPaymentProvisionId": "205",
                 "OTPNeeded": true
               }
             }
@@ -403,7 +326,7 @@
     },
     "/v1/pos/CompleteBonusPayment": {
       "post": {
-        "description": "In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body.",
+        "description": "In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Complete Bonus Payment",
         "tags": [
           "Bonus Payments"
@@ -413,27 +336,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -498,7 +400,7 @@
     },
     "/v1/pos/CancelBonusPayment": {
       "post": {
-        "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.",
+        "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Cancel Bonus Payment",
         "tags": [
           "Bonus Payments"
@@ -508,27 +410,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -593,7 +474,7 @@
     },
     "/v1/pos/GetBonusProvisions": {
       "post": {
-        "description": "Before cancelling the payment with Miles this API is used to list the related sale.",
+        "description": "Before cancelling the payment with Miles this API is used to list the related sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
         "summary": "Get Bonus Provisions",
         "tags": [
           "Bonus Payments"
@@ -603,27 +484,6 @@
           "application/json"
         ],
         "parameters": [
-          {
-            "name": "Accept",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It advertises which content type is able to understand."
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It tells the client what the content type of the returned."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "It includes OAuth2 token."
-          },
           {
             "name": "Body",
             "in": "body",
@@ -737,15 +597,15 @@
       "title": "GetBonusProvisionsRequest",
       "description": "",
       "example": {
-        "readCode": "{{gsm_number}}",
+        "readCode": "5929000000",
         "readCodeType": "1",
-        "OKCSicilNo": "ABCDEFG123"
+        "OKCSicilNo": "JH20085055"
       },
       "type": "object",
       "properties": {
         "readCode": {
           "description": "Müşteri tanıma tercihi, Telefon numarası, QR code gibi",
-          "example": "{{gsm_number}}",
+          "example": "\"5929000000\"",
           "type": "string"
         },
         "readCodeType": {
@@ -755,7 +615,7 @@
         },
         "OKCSicilNo": {
           "description": "Terminal code.",
-          "example": "\"ABCDEFG123\"",
+          "example": "\"JH20085055\"",
           "type": "string"
         }
       },
@@ -819,25 +679,25 @@
       "title": "OAuthRequest",
       "description": "Representing an OAuth request.",
       "example": {
-        "client_id": "{{client_id}}",
-        "client_secret": "{{client_secret}}",
-        "grant_type": "{{grant_type}}"
+        "client_id": "552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66",
+        "client_secret": "d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
+        "grant_type": "client_credentials"
       },
       "type": "object",
       "properties": {
         "client_id": {
           "description": "ID of the client which is provided by Global Miles.",
-          "example": "{{client_id}}",
+          "example": "552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66",
           "type": "string"
         },
         "client_secret": {
           "description": "Secret of the client which is provided by Global Miles.",
-          "example": "{{client_secret}}",
+          "example": "d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
           "type": "string"
         },
         "grant_type": {
           "description": "Type of the OAuth flows. We support only one type of token: client_credentials",
-          "example": "{{grant_type}}",
+          "example": "client_credentials",
           "type": "string"
         }
       },
@@ -937,12 +797,12 @@
           "format": "int32"
         },
         "recognitionId": {
-          "description": "session based İdentification Number .",
+          "description": "Session based Identification Number .",
           "type": "integer",
           "format": "int32"
         },
         "EkuNo": {
-          "description": "Eku no(Electronic Journal)",
+          "description": "Eku no (Electronic Journal)",
           "type": "integer",
           "format": "int32"
         },
@@ -951,7 +811,7 @@
           "type": "string"
         },
         "ReceiptDateTime": {
-          "description": "it should be  GGAAYYYYSSDD formated.",
+          "description": "It should be  GGAAYYYYSSDD formatted.",
           "type": "string"
         },
         "InvoiceInfo": {
@@ -1004,7 +864,7 @@
       "title": "StartBonusPaymentRequest",
       "example": {
         "totalReceiptAmount": 600,
-        "totalBonusAmount": 300,
+        "usedBonusAmount": 300,
         "recognitionId": 8,
         "OKCSicilNo": "ABCDEFG123"
       },
@@ -1016,8 +876,8 @@
           "type": "integer",
           "format": "int32"
         },
-        "totalBonusAmount": {
-          "description": "Total Bonus(Mile) Amount  that has been used in the shopping  ex:0.85 TL == 85",
+        "usedBonusAmount": {
+          "description": "Used Bonus(Mile) Amount that has been used in the shopping  ex:0.85 TL == 85",
           "example": 600,
           "type": "integer",
           "format": "int32"
@@ -1036,7 +896,7 @@
       },
       "required": [
         "totalReceiptAmount",
-        "totalBonusAmount",
+        "usedBonusAmount",
         "recognitionId",
         "OKCSicilNo"
       ]
@@ -1044,19 +904,19 @@
     "CancelBonusPaymentRequest": {
       "title": "CancelBonusPaymentRequest",
       "example": {
-        "bonusPaymentProvisionId": "2",
-        "OKCSicilNo": "ABCDEFG123"
+        "bonusPaymentProvisionId": "206",
+        "OKCSicilNo": "JH20085055"
       },
       "type": "object",
       "properties": {
         "bonusPaymentProvisionId": {
           "description": "Provision ID",
-          "example": "\"2\"",
+          "example": "\"206\"",
           "type": "string"
         },
         "OKCSicilNo": {
           "description": "Terminal code.",
-          "example": "\"ABCDEFG123\"",
+          "example": "\"JH20085055\"",
           "type": "string"
         }
       },
@@ -1116,17 +976,17 @@
     "GetCustomerInfoRequest": {
       "title": "GetCustomerInfoRequest",
       "example": {
-        "readCode": "{{GSM_NUMBER}}",
+        "readCode": "5929000000",
         "readCodeType": "1",
         "totalAmount": "10000",
         "totalVATAmount": "1000",
-        "OKCSicilNo": "ABCDEFG123"
+        "OKCSicilNo": "JH20085055"
       },
       "type": "object",
       "properties": {
         "readCode": {
           "description": "Customer Identification Method ; GSM NO, Customer Unique ID or CODE",
-          "example": "{{GSM_NUMBER}}",
+          "example": "\"5929000000\"",
           "type": "string"
         },
         "readCodeType": {
@@ -1149,7 +1009,7 @@
         },
         "OKCSicilNo": {
           "description": "Terminal code.",
-          "example": "ABCDEFG123",
+          "example": "\"JH20085055\"",
           "type": "string"
         }
       },
@@ -1303,32 +1163,32 @@
     "CompleteBonusPaymentRequest": {
       "title": "CompleteBonusPaymentRequest",
       "example": {
-        "bonusPaymentProvisionId": "3",
-        "OKCSicilNo": "ABCDEFG123",
-        "OTP": "3202"
+        "bonusPaymentProvisionId": "206",
+        "OKCSicilNo": "JH20085055",
+        "OTP": "3636"
       },
       "type": "object",
       "properties": {
         "bonusPaymentProvisionId": {
           "description": "Provision ID",
-          "example": "\"3\"",
-          "type": "string"
-        },
-        "OTP": {
-          "description": "One time password that sends to customer phone",
-          "example": "\"3202\"",
+          "example": "\"206\"",
           "type": "string"
         },
         "OKCSicilNo": {
           "description": "Terminal code.",
-          "example": "\"ABCDEFG123\"",
+          "example": "\"JH20085055\"",
+          "type": "string"
+        },
+        "OTP": {
+          "description": "One time password that sends to customer phone",
+          "example": "\"3636\"",
           "type": "string"
         }
       },
       "required": [
         "bonusPaymentProvisionId",
-        "OTP",
-        "OKCSicilNo"
+        "OKCSicilNo",
+        "OTP"
       ]
     }
   }
