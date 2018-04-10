@@ -1,7 +1,7 @@
 ﻿{
   "info": {
     "name": "Global Miles POS API",
-    "_postman_id": "c6e954ce-0418-4a87-ab65-e0ceb6d2678a",
+    "_postman_id": "0d0f7881-9519-46e6-a961-e5333dade690",
     "description": "By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key. Ask us Please.\nBefore using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  \nDuring shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. \nPOS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .\n\nUse Your Mile(Bonus):\n\nAfter Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.\n\nCancel Payment with Miles:\nBy using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/"
   },
@@ -10,36 +10,20 @@
       "name": "Payment Systems",
       "item": [
         {
-          "id": "a1b08001-59ae-4401-aa0f-e5e031f8243b",
+          "id": "a0e2216f-4bb8-4073-b8a2-6911291429cd",
           "name": "Transaction Result",
           "request": {
             "url": "http://default/v1/pos/TransactionResult",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
@@ -47,14 +31,14 @@
               "mode": "raw",
               "raw": "{\r\n  \"totalReceiptAmount\": \"2000\",\r\n  \"totalVATAmount\": \"1000\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"ReceiptNo\": \"0007\",\r\n  \"Zno\": \"15\",\r\n  \"EkuNo\": \"03\",\r\n  \"recognitionId\": 197,\r\n  \"ReceiptType\": \"1\",\r\n  \"ReceiptDateTime\": \"150420171530\",\r\n  \"InvoiceInfo\": {\r\n    \"invoiceType\": \"0\",\r\n    \"invoiceNo\": \"17\",\r\n    \"invoiceDate\": \"15.04.2017\"\r\n  },\r\n  \"Payments\": [\r\n    {\r\n      \"payAmount\": \"2000\",\r\n      \"paymentType\": \"1\"\r\n    }\r\n  ],\r\n  \"Discounts\": [\r\n    {\r\n      \"orijin\": \"\",\r\n      \"type\": \"\",\r\n      \"value\": \"\"\r\n    }\r\n  ]\r\n}"
             },
-            "description": "After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction."
+            "description": "After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "81e94471-c660-4f98-86de-64f8c0a02fbe"
+              "id": "4e053288-9834-469a-9023-20d2acb1cc92"
             }
           ]
         }
@@ -64,28 +48,29 @@
       "name": "Authentication",
       "item": [
         {
-          "id": "66ef9fd0-de78-4641-b83a-e2ed05f829e2",
+          "id": "0678462b-865d-45fe-973e-6e852a635786",
           "name": "Authentication",
           "request": {
             "url": "http://default/oauth/token",
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"client_id\": \"4b426d0f24705e018dffbe907238778cfd6c9b7c601fbd94cc00a5849e5757f5\",\r\n  \"client_secret\": \"89e2b197ac05d60a59f4835051f76fb69706e2196201bed5ee92531c9c54936f\",\r\n  \"grant_type\": \"client_credentials\"\r\n}"
+              "raw": "{\r\n  \"client_id\": \"552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\",\r\n  \"client_secret\": \"d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b\",\r\n  \"grant_type\": \"client_credentials\"\r\n}"
             },
             "description": "An access token will allow you to make requests for the system. We support only one type of token: client_credentials"
           },
@@ -94,7 +79,7 @@
               "body": "{\r\n  \"access_token\": \"4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c\",\r\n  \"token_type\": \"bearer\",\r\n  \"created_at\": \"1496737098\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "0ebf9d12-c86f-4fd5-9b6c-3c8dc2809187"
+              "id": "96ea30b9-37e0-4375-a631-d05c9facfd8b"
             }
           ]
         }
@@ -104,36 +89,20 @@
       "name": "Common",
       "item": [
         {
-          "id": "8e53b935-95bf-4e3d-84ec-8679e8eb2424",
+          "id": "78026d58-a683-4b5a-8c30-39154f6bde44",
           "name": "Get Customer Info",
           "request": {
             "url": "http://default/v1/pos/GetCustomerInfo",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
@@ -141,14 +110,14 @@
               "mode": "raw",
               "raw": "{\r\n  \"readCode\": \"5929000000\",\r\n  \"readCodeType\": 1,\r\n  \"totalAmount\": 1000,\r\n  \"totalVATAmount\": 8,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
             },
-            "description": "This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping."
+            "description": "This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"recognitionId\": 197,\r\n  \"availablePoint\": 350,\r\n  \"loyaltyDiscountedPrice\": 1000\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "3b66058b-c9ad-4ef8-aee5-0ca3175123bd"
+              "id": "c47f428a-2052-4349-b438-82652b2a9e32"
             }
           ]
         }
@@ -158,183 +127,119 @@
       "name": "Bonus Payments",
       "item": [
         {
-          "id": "4231a1da-705d-42d3-85df-f0d7ad82c955",
+          "id": "a77f0c67-79b0-4cbc-8c07-c93af783df67",
           "name": "Start Bonus Payment",
           "request": {
             "url": "http://default/v1/pos/StartBonusPayment",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"totalReceiptAmount\": 1000,\r\n  \"totalBonusAmount\": 300,\r\n  \"recognitionId\": 197,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
+              "raw": "{\r\n  \"totalReceiptAmount\": 1000,\r\n  \"usedBonusAmount\": 300,\r\n  \"recognitionId\": 197,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
             },
-            "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to cutomer GSM number. This OTP must be used with Complete API in order to complete sale."
+            "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"bonusPaymentProvisionId\": 4,\r\n  \"OTPNeeded\": true\r\n}",
+              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"bonusPaymentProvisionId\": \"205\",\r\n  \"OTPNeeded\": true\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "e07e2660-0d86-4ee9-ba32-5d80d7110a36"
+              "id": "fcd1c906-da59-4449-92bb-a2fc9b6a4ac8"
             }
           ]
         },
         {
-          "id": "2abc8dae-b6f4-4a9f-a9c8-e9bbe4d59ced",
+          "id": "e1aee4ae-1029-487b-82d2-c476b02c51f0",
           "name": "Complete Bonus Payment",
           "request": {
             "url": "http://default/v1/pos/CompleteBonusPayment",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"3\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"OTP\": \"3202\"\r\n}"
+              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"206\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"OTP\": \"3636\"\r\n}"
             },
-            "description": "In order to finalise payment with Miles use this API.Use the OTP number  which is send to user GSM on the Request body."
+            "description": "In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "eb88321a-d900-4b92-8168-6fe931c9587e"
+              "id": "8c66bb48-5036-4630-8018-eb7cb9371f1d"
             }
           ]
         },
         {
-          "id": "7ca72543-d967-4645-8bfc-d30469d970de",
+          "id": "683d6b6f-daad-485c-9b56-316e1434c67d",
           "name": "Cancel Bonus Payment",
           "request": {
             "url": "http://default/v1/pos/CancelBonusPayment",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"2\",\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
+              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"206\",\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
             },
-            "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers."
+            "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "5c452273-e46e-4a7d-a68a-45c279d87106"
+              "id": "d7146817-4633-47e3-8fa1-a335b2d2006c"
             }
           ]
         },
         {
-          "id": "82c6a472-8e0a-4509-8f4a-e6207fb1d962",
+          "id": "f6225d7d-c1e5-4a4e-a158-67a29d746118",
           "name": "Get Bonus Provisions",
           "request": {
             "url": "http://default/v1/pos/GetBonusProvisions",
-            "auth": {
-              "type": "oauth2",
-              "oauth2": {
-                "accessTokenUrl": "https://api.sandbox.globalmiles.com/oauth/token",
-                "scope": "",
-                "grantType": "client_credentials"
-              }
-            },
             "method": "POST",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
-                "description": "It advertises which content type is able to understand.",
                 "disabled": false
               },
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "description": "It tells the client what the content type of the returned.",
-                "disabled": false
-              },
-              {
-                "key": "Authorization",
-                "value": "bearer 4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c",
-                "description": "It includes OAuth2 token.",
+                "value": "application/json;charset=utf-8",
                 "disabled": false
               }
             ],
@@ -342,13 +247,13 @@
               "mode": "raw",
               "raw": "{\r\n  \"readCode\": \"5929000000\",\r\n  \"readCodeType\": \"1\",\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
             },
-            "description": "Before cancelling the payment with Miles this API is used to list the related sale."
+            "description": "Before cancelling the payment with Miles this API is used to list the related sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "code": 200,
               "name": "Response_200",
-              "id": "705fa8b3-0e43-49be-9102-b8511133ba93"
+              "id": "12b5e72d-bfa8-43de-bfb4-0016764a319d"
             }
           ]
         }
