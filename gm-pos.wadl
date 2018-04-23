@@ -23,25 +23,25 @@ Cancel Payment with Miles:
 By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .</doc>
   <grammars>
     <xs:schema xmlns:tns="default/schemas" targetNamespace="default/schemas" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-      <xs:element name="CompleteBonusPaymentResponse" type="tns:CompleteBonusPaymentResponse" />
-      <xs:element name="CancelBonusPaymentResponse" type="tns:CancelBonusPaymentResponse" />
-      <xs:element name="GetBonusProvisionsRequest" type="tns:GetBonusProvisionsRequest" />
+      <xs:element name="CompleteMilePaymentResponse" type="tns:CompleteMilePaymentResponse" />
+      <xs:element name="CancelMilePaymentResponse" type="tns:CancelMilePaymentResponse" />
+      <xs:element name="GetMileProvisionsRequest" type="tns:GetMileProvisionsRequest" />
       <xs:element name="GetBonusProvisionsResponse" type="tns:GetBonusProvisionsResponse" />
-      <xs:element name="BonusProvision" type="tns:BonusProvision" />
+      <xs:element name="MileProvision" type="tns:MileProvision" />
       <xs:element name="OAuthRequest" type="tns:OAuthRequest" />
       <xs:element name="OAuthResponse" type="tns:OAuthResponse" />
       <xs:element name="TransactionResultRequest" type="tns:TransactionResultRequest" />
-      <xs:element name="StartBonusPaymentRequest" type="tns:StartBonusPaymentRequest" />
-      <xs:element name="CancelBonusPaymentRequest" type="tns:CancelBonusPaymentRequest" />
+      <xs:element name="StartMilePaymentRequest" type="tns:StartMilePaymentRequest" />
+      <xs:element name="CancelMilePaymentRequest" type="tns:CancelMilePaymentRequest" />
       <xs:element name="GetCustomerInfoResponse" type="tns:GetCustomerInfoResponse" />
       <xs:element name="GetCustomerInfoRequest" type="tns:GetCustomerInfoRequest" />
       <xs:element name="Discount" type="tns:Discount" />
       <xs:element name="Payment" type="tns:Payment" />
       <xs:element name="Invoice" type="tns:Invoice" />
       <xs:element name="TransactionResultResponse" type="tns:TransactionResultResponse" />
-      <xs:element name="StartBonusPaymentResponse" type="tns:StartBonusPaymentResponse" />
-      <xs:element name="CompleteBonusPaymentRequest" type="tns:CompleteBonusPaymentRequest" />
-      <xs:complexType name="CompleteBonusPaymentResponse">
+      <xs:element name="StartMilePaymentResponse" type="tns:StartMilePaymentResponse" />
+      <xs:element name="CompleteMilePaymentRequest" type="tns:CompleteMilePaymentRequest" />
+      <xs:complexType name="CompleteMilePaymentResponse">
         <xs:sequence>
           <xs:element minOccurs="1" name="returnCode">
             <xs:simpleType>
@@ -61,7 +61,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="CancelBonusPaymentResponse">
+      <xs:complexType name="CancelMilePaymentResponse">
         <xs:sequence>
           <xs:element minOccurs="1" name="returnCode">
             <xs:simpleType>
@@ -81,12 +81,12 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="GetBonusProvisionsRequest">
+      <xs:complexType name="GetMileProvisionsRequest">
         <xs:sequence>
           <xs:element minOccurs="1" name="readCode">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Müşteri tanıma tercihi, Telefon numarası, QR code gibi</xs:documentation>
+                <xs:documentation>Customer Identification Method ; GSM NO, Customer Unique ID or CODE</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -94,7 +94,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="readCodeType">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>1: Telefon numarası, 2: Müşteri unique identifier, 3: Diğer</xs:documentation>
+                <xs:documentation>1: GSM NO, 2: Customer unique identifier, 3: CODE</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -127,10 +127,10 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
               <xs:restriction base="xs:string" />
             </xs:simpleType>
           </xs:element>
-          <xs:element minOccurs="1" maxOccurs="unbounded" name="bonusProvisions" type="tns:BonusProvision" />
+          <xs:element minOccurs="1" maxOccurs="unbounded" name="bonusProvisions" type="tns:MileProvision" />
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="BonusProvision">
+      <xs:complexType name="MileProvision">
         <xs:sequence>
           <xs:element minOccurs="1" name="bonusPaymentProvisionId">
             <xs:simpleType>
@@ -307,7 +307,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" maxOccurs="unbounded" name="Discounts" type="tns:Discount" />
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="StartBonusPaymentRequest">
+      <xs:complexType name="StartMilePaymentRequest">
         <xs:sequence>
           <xs:element minOccurs="1" name="totalReceiptAmount">
             <xs:simpleType>
@@ -320,7 +320,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="usedBonusAmount">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Used Bonus(Mile) Amount that has been used in the shopping  ex:0.85 TL == 85</xs:documentation>
+                <xs:documentation>Used Amount that has been used in the shopping  ex:0.85 TL == 85</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -343,7 +343,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="CancelBonusPaymentRequest">
+      <xs:complexType name="CancelMilePaymentRequest">
         <xs:sequence>
           <xs:element minOccurs="1" name="bonusPaymentProvisionId">
             <xs:simpleType>
@@ -368,7 +368,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="returnCode">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -376,7 +376,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="returnDesc">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -384,7 +384,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="recognitionId">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Kullanıcının GlobalMiles sistemindeki unique identifier değeri</xs:documentation>
+                <xs:documentation>Session based user identification number</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -392,7 +392,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="availablePoint">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Müşterinin bu işlemde kullanabileceği puanın TL karşılığıdır. Son iki karakter kuruşları temsil eder. Örneğin: 12.56 TL == 1256</xs:documentation>
+                <xs:documentation>The available points that the customer can use in this transaction is in USD which is calculated from customer's current miles. EX: 12.56 USD == 1256</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -400,7 +400,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="loyaltyDiscountedPrice">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Sadakat indirimi. Son iki karakter kuruşları temsil eder. Örneğin: 90.50 TL == 9050</xs:documentation>
+                <xs:documentation>Loyalty discounted price ex: 90.50 USD == 9050</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -428,7 +428,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="totalAmount">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Total receipt amount.  ex:12.34 TL == 1234</xs:documentation>
+                <xs:documentation>Total receipt amount.  ex:12.34 USD == 1234</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -436,7 +436,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="totalVATAmount">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Total Tax Value. EX:1.34 TL == 134</xs:documentation>
+                <xs:documentation>Total Tax Value. EX:1.34 USD == 134</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -508,7 +508,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="returnCode">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -516,19 +516,19 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="returnDesc">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="StartBonusPaymentResponse">
+      <xs:complexType name="StartMilePaymentResponse">
         <xs:sequence>
           <xs:element minOccurs="1" name="returnCode">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>0 ise başarılı, 1 veya daha büyük ise başarısız</xs:documentation>
+                <xs:documentation>0  Success, 1 and bigger than 1 unsuccessful</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:integer" />
             </xs:simpleType>
@@ -536,7 +536,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="returnDesc">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Başarılı ise boş, eğer hata varsa; hata mesajını içerir.</xs:documentation>
+                <xs:documentation>if success return is empty. if unsuccessful it returns error message</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
@@ -544,19 +544,19 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
           <xs:element minOccurs="1" name="bonusPaymentProvisionId">
             <xs:simpleType>
               <xs:annotation>
-                <xs:documentation>Provizyon ID</xs:documentation>
+                <xs:documentation>Provision ID for the payment</xs:documentation>
               </xs:annotation>
               <xs:restriction base="xs:string" />
             </xs:simpleType>
           </xs:element>
           <xs:element minOccurs="1" name="OTPNeeded" type="xs:boolean">
             <xs:annotation>
-              <xs:documentation>Tek kullanımlık parola gerekli mi?</xs:documentation>
+              <xs:documentation>Is a one-time password required?</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="CompleteBonusPaymentRequest">
+      <xs:complexType name="CompleteMilePaymentRequest">
         <xs:sequence>
           <xs:element minOccurs="1" name="bonusPaymentProvisionId">
             <xs:simpleType>
@@ -589,7 +589,7 @@ By using Get Bonus Provision &amp; CancelBonusPayment APIs  it allows to  list r
   <resources base="default">
     <resource id="_v1posTransactionResult" path="/v1/pos/TransactionResult">
       <method id="TransactionResult" name="POST">
-        <doc title="Transaction Result" xml:lang="en">After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+        <doc title="Transaction Result" xml:lang="en">After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
@@ -650,7 +650,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
     </resource>
     <resource id="_v1posGetCustomerInfo" path="/v1/pos/GetCustomerInfo">
       <method id="GetCustomerInfo" name="POST">
-        <doc title="Get Customer Info" xml:lang="en">This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+        <doc title="Get Customer Info" xml:lang="en">This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
@@ -681,17 +681,17 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
       </method>
     </resource>
     <resource id="_v1posStartBonusPayment" path="/v1/pos/StartBonusPayment">
-      <method id="StartBonusPayment" name="POST">
-        <doc title="Start Bonus Payment" xml:lang="en">After getting customer info's and RecognitionID to start Payment with Miles Use this API.
+      <method id="StartMilePayment" name="POST">
+        <doc title="Start Mile Payment" xml:lang="en">After getting customer info's and RecognitionID to start Payment with Miles Use this API.
 After calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <representation element="tns:StartBonusPaymentRequest" mediaType="application/json" />
+          <representation element="tns:StartMilePaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
-          <representation element="tns:StartBonusPaymentResponse" mediaType="application/json" />
+          <representation element="tns:StartMilePaymentResponse" mediaType="application/json" />
         </response>
         <response status="400">
           <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
@@ -714,16 +714,16 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
       </method>
     </resource>
     <resource id="_v1posCompleteBonusPayment" path="/v1/pos/CompleteBonusPayment">
-      <method id="CompleteBonusPayment" name="POST">
-        <doc title="Complete Bonus Payment" xml:lang="en">In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
+      <method id="CompleteMilePayment" name="POST">
+        <doc title="Complete Mile Payment" xml:lang="en">In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <representation element="tns:CompleteBonusPaymentRequest" mediaType="application/json" />
+          <representation element="tns:CompleteMilePaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
-          <representation element="tns:CompleteBonusPaymentResponse" mediaType="application/json" />
+          <representation element="tns:CompleteMilePaymentResponse" mediaType="application/json" />
         </response>
         <response status="400">
           <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
@@ -746,16 +746,16 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
       </method>
     </resource>
     <resource id="_v1posCancelBonusPayment" path="/v1/pos/CancelBonusPayment">
-      <method id="CancelBonusPayment" name="POST">
-        <doc title="Cancel Bonus Payment" xml:lang="en">In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
+      <method id="CancelMilePayment" name="POST">
+        <doc title="Cancel Mile Payment" xml:lang="en">In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <representation element="tns:CancelBonusPaymentRequest" mediaType="application/json" />
+          <representation element="tns:CancelMilePaymentRequest" mediaType="application/json" />
         </request>
         <response status="200">
-          <representation element="tns:CancelBonusPaymentResponse" mediaType="application/json" />
+          <representation element="tns:CancelMilePaymentResponse" mediaType="application/json" />
         </response>
         <response status="400">
           <doc title="400" xml:lang="en">Bad Request	- The request was unacceptable, often due to missing a required parameter.</doc>
@@ -778,13 +778,13 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
       </method>
     </resource>
     <resource id="_v1posGetBonusProvisions" path="/v1/pos/GetBonusProvisions">
-      <method id="GetBonusProvisions" name="POST">
-        <doc title="Get Bonus Provisions" xml:lang="en">Before cancelling the payment with Miles this API is used to list the related sale.
+      <method id="GetMileProvisions" name="POST">
+        <doc title="Get Mile Provisions" xml:lang="en">Before cancelling the payment with Miles this API is used to list the related sale.
 
 You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b</doc>
         <request>
-          <representation element="tns:GetBonusProvisionsRequest" mediaType="application/json" />
+          <representation element="tns:GetMileProvisionsRequest" mediaType="application/json" />
         </request>
         <response status="200">
           <representation element="tns:GetBonusProvisionsResponse" mediaType="application/json" />

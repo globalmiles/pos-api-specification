@@ -1,16 +1,16 @@
 ﻿{
   "info": {
     "name": "Global Miles POS API",
-    "_postman_id": "0d0f7881-9519-46e6-a961-e5333dade690",
+    "_postman_id": "525b7326-c05b-4cbf-8679-1b2b64021426",
     "description": "By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key. Ask us Please.\nBefore using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  \nDuring shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. \nPOS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .\n\nUse Your Mile(Bonus):\n\nAfter Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.\n\nCancel Payment with Miles:\nBy using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/"
   },
   "item": [
     {
-      "name": "Payment Systems",
+      "name": "Earn Miles",
       "item": [
         {
-          "id": "a0e2216f-4bb8-4073-b8a2-6911291429cd",
+          "id": "f860637c-c167-4989-9aa3-00f709b35e8f",
           "name": "Transaction Result",
           "request": {
             "url": "http://default/v1/pos/TransactionResult",
@@ -31,14 +31,14 @@
               "mode": "raw",
               "raw": "{\r\n  \"totalReceiptAmount\": \"2000\",\r\n  \"totalVATAmount\": \"1000\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"ReceiptNo\": \"0007\",\r\n  \"Zno\": \"15\",\r\n  \"EkuNo\": \"03\",\r\n  \"recognitionId\": 197,\r\n  \"ReceiptType\": \"1\",\r\n  \"ReceiptDateTime\": \"150420171530\",\r\n  \"InvoiceInfo\": {\r\n    \"invoiceType\": \"0\",\r\n    \"invoiceNo\": \"17\",\r\n    \"invoiceDate\": \"15.04.2017\"\r\n  },\r\n  \"Payments\": [\r\n    {\r\n      \"payAmount\": \"2000\",\r\n      \"paymentType\": \"1\"\r\n    }\r\n  ],\r\n  \"Discounts\": [\r\n    {\r\n      \"orijin\": \"\",\r\n      \"type\": \"\",\r\n      \"value\": \"\"\r\n    }\r\n  ]\r\n}"
             },
-            "description": "After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
+            "description": "After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "4e053288-9834-469a-9023-20d2acb1cc92"
+              "id": "0103a676-a22a-4a66-8ab0-f3944d8eda45"
             }
           ]
         }
@@ -48,7 +48,7 @@
       "name": "Authentication",
       "item": [
         {
-          "id": "0678462b-865d-45fe-973e-6e852a635786",
+          "id": "5ba0797e-4251-4c38-8387-577af460559a",
           "name": "Authentication",
           "request": {
             "url": "http://default/oauth/token",
@@ -79,7 +79,7 @@
               "body": "{\r\n  \"access_token\": \"4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c\",\r\n  \"token_type\": \"bearer\",\r\n  \"created_at\": \"1496737098\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "96ea30b9-37e0-4375-a631-d05c9facfd8b"
+              "id": "2d698d01-8cf9-42ee-8aba-33bf5786233c"
             }
           ]
         }
@@ -89,7 +89,7 @@
       "name": "Common",
       "item": [
         {
-          "id": "78026d58-a683-4b5a-8c30-39154f6bde44",
+          "id": "0c63b290-6e37-46c0-bc17-5c6a7a81ad79",
           "name": "Get Customer Info",
           "request": {
             "url": "http://default/v1/pos/GetCustomerInfo",
@@ -110,25 +110,25 @@
               "mode": "raw",
               "raw": "{\r\n  \"readCode\": \"5929000000\",\r\n  \"readCodeType\": 1,\r\n  \"totalAmount\": 1000,\r\n  \"totalVATAmount\": 8,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
             },
-            "description": "This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
+            "description": "This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
           },
           "response": [
             {
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"recognitionId\": 197,\r\n  \"availablePoint\": 350,\r\n  \"loyaltyDiscountedPrice\": 1000\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "c47f428a-2052-4349-b438-82652b2a9e32"
+              "id": "9268d673-6a8b-48bf-93c0-e37f83f3c986"
             }
           ]
         }
       ]
     },
     {
-      "name": "Bonus Payments",
+      "name": "Pay with Miles",
       "item": [
         {
-          "id": "a77f0c67-79b0-4cbc-8c07-c93af783df67",
-          "name": "Start Bonus Payment",
+          "id": "06b40b51-6adf-4483-af3e-b6b20648207d",
+          "name": "Start Mile Payment",
           "request": {
             "url": "http://default/v1/pos/StartBonusPayment",
             "method": "POST",
@@ -155,13 +155,13 @@
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"bonusPaymentProvisionId\": \"205\",\r\n  \"OTPNeeded\": true\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "fcd1c906-da59-4449-92bb-a2fc9b6a4ac8"
+              "id": "59f76b40-b99a-4992-a467-7abe764cd779"
             }
           ]
         },
         {
-          "id": "e1aee4ae-1029-487b-82d2-c476b02c51f0",
-          "name": "Complete Bonus Payment",
+          "id": "db13e312-93a9-4336-825d-bb3754deb730",
+          "name": "Complete Mile Payment",
           "request": {
             "url": "http://default/v1/pos/CompleteBonusPayment",
             "method": "POST",
@@ -188,13 +188,13 @@
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "8c66bb48-5036-4630-8018-eb7cb9371f1d"
+              "id": "8d312596-ca47-462a-83eb-e6597dc46e91"
             }
           ]
         },
         {
-          "id": "683d6b6f-daad-485c-9b56-316e1434c67d",
-          "name": "Cancel Bonus Payment",
+          "id": "0383bfb7-09fc-40e6-95a6-dba290a23b6f",
+          "name": "Cancel Mile Payment",
           "request": {
             "url": "http://default/v1/pos/CancelBonusPayment",
             "method": "POST",
@@ -221,13 +221,13 @@
               "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "d7146817-4633-47e3-8fa1-a335b2d2006c"
+              "id": "3c64ae66-0987-4d5c-9008-87c2da035036"
             }
           ]
         },
         {
-          "id": "f6225d7d-c1e5-4a4e-a158-67a29d746118",
-          "name": "Get Bonus Provisions",
+          "id": "b7a47646-2770-4d56-913a-a356d5ffe611",
+          "name": "Get Mile Provisions",
           "request": {
             "url": "http://default/v1/pos/GetBonusProvisions",
             "method": "POST",
@@ -253,7 +253,7 @@
             {
               "code": 200,
               "name": "Response_200",
-              "id": "12b5e72d-bfa8-43de-bfb4-0016764a319d"
+              "id": "6e09a350-cc17-4dc8-8a4a-65ca3f5d70aa"
             }
           ]
         }

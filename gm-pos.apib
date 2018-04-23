@@ -50,12 +50,12 @@ This API uses OAuth v2 Client Credentials Grant for its authentication.
 The properties required for this OAuth implentation are as follows:
 + Access Token Url - /oauth/token
 
-# Group Payment Systems
+# Group Earn Miles
 
 ## V1 Pos TransactionResult [/v1/pos/TransactionResult]
 
 ### Transaction Result [POST]
-After getting customer info by Get customer Info API and finished the shopping procedure in POS terminal, use this API to complete transaction.
+After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.
 
 
 
@@ -194,7 +194,7 @@ An access token will allow you to make requests for the system. We support only 
 ## V1 Pos GetCustomerInfo [/v1/pos/GetCustomerInfo]
 
 ### Get Customer Info [POST]
-This API will help you to retrieve customer's mil quantity and unique identifier value.Unique identifier value must be used by Transaction Result API in order to complete shopping.
+This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.
 
 
 
@@ -264,11 +264,11 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 
 
-# Group Bonus Payments
+# Group Pay with Miles
 
 ## V1 Pos StartBonusPayment [/v1/pos/StartBonusPayment]
 
-### Start Bonus Payment [POST]
+### Start Mile Payment [POST]
 After getting customer info's and RecognitionID to start Payment with Miles Use this API.
 
 After calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.
@@ -280,11 +280,11 @@ You can try this API with configuring client parameters in Console Tab below. Te
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
 
 + Request (application/json)
-    + Attributes (StartBonusPaymentRequest)
+    + Attributes (StartMilePaymentRequest)
 
 
 + Response 200 (application/json)
-    + Attributes (StartBonusPaymentResponse)
+    + Attributes (StartMilePaymentResponse)
 
     + Body
 
@@ -341,7 +341,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 ## V1 Pos CompleteBonusPayment [/v1/pos/CompleteBonusPayment]
 
-### Complete Bonus Payment [POST]
+### Complete Mile Payment [POST]
 In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
 
 
@@ -351,11 +351,11 @@ You can try this API with configuring client parameters in Console Tab below. Te
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
 
 + Request (application/json)
-    + Attributes (CompleteBonusPaymentRequest)
+    + Attributes (CompleteMilePaymentRequest)
 
 
 + Response 200 (application/json)
-    + Attributes (CompleteBonusPaymentResponse)
+    + Attributes (CompleteMilePaymentResponse)
 
     + Body
 
@@ -410,7 +410,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 ## V1 Pos CancelBonusPayment [/v1/pos/CancelBonusPayment]
 
-### Cancel Bonus Payment [POST]
+### Cancel Mile Payment [POST]
 In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
 
 
@@ -420,11 +420,11 @@ You can try this API with configuring client parameters in Console Tab below. Te
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
 
 + Request (application/json)
-    + Attributes (CancelBonusPaymentRequest)
+    + Attributes (CancelMilePaymentRequest)
 
 
 + Response 200 (application/json)
-    + Attributes (CancelBonusPaymentResponse)
+    + Attributes (CancelMilePaymentResponse)
 
     + Body
 
@@ -479,7 +479,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 ## V1 Pos GetBonusProvisions [/v1/pos/GetBonusProvisions]
 
-### Get Bonus Provisions [POST]
+### Get Mile Provisions [POST]
 Before cancelling the payment with Miles this API is used to list the related sale.
 
 
@@ -489,7 +489,7 @@ You can try this API with configuring client parameters in Console Tab below. Te
 and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
 
 + Request (application/json)
-    + Attributes (GetBonusProvisionsRequest)
+    + Attributes (GetMileProvisionsRequest)
 
 
 + Response 200 (application/json)
@@ -542,7 +542,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 # Data Structures
 
-## CompleteBonusPaymentResponse (object)
+## CompleteMilePaymentResponse (object)
 
 
 ### Properties
@@ -550,7 +550,7 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 + `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
 
 
-## CancelBonusPaymentResponse (object)
+## CancelMilePaymentResponse (object)
 
 
 ### Properties
@@ -558,12 +558,12 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 + `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
 
 
-## GetBonusProvisionsRequest (object)
+## GetMileProvisionsRequest (object)
 
 
 ### Properties
-+ `readCode`: `"5929000000"` (string, required) - Müşteri tanıma tercihi, Telefon numarası, QR code gibi
-+ `readCodeType`: `"1"` (string, required) - 1: Telefon numarası, 2: Müşteri unique identifier, 3: Diğer
++ `readCode`: `"5929000000"` (string, required) - Customer Identification Method ; GSM NO, Customer Unique ID or CODE
++ `readCodeType`: `"1"` (string, required) - 1: GSM NO, 2: Customer unique identifier, 3: CODE
 + `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
 
 
@@ -573,10 +573,10 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 ### Properties
 + `returnCode` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
 + `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
-+ `bonusProvisions` (array[BonusProvision], required) 
++ `bonusProvisions` (array[MileProvision], required) 
 
 
-## BonusProvision (object)
+## MileProvision (object)
 
 
 ### Properties
@@ -621,17 +621,17 @@ Representing an OAuth response.
 + `Discounts` (array[Discount], required) 
 
 
-## StartBonusPaymentRequest (object)
+## StartMilePaymentRequest (object)
 
 
 ### Properties
 + `totalReceiptAmount`: `300` (number, required) - Total Receipt Amount  ex:12.35 TL == 1235
-+ `usedBonusAmount`: `600` (number, required) - Used Bonus(Mile) Amount that has been used in the shopping  ex:0.85 TL == 85
++ `usedBonusAmount`: `600` (number, required) - Used Amount that has been used in the shopping  ex:0.85 TL == 85
 + `recognitionId`: `8` (number, required) - Session based user identification number
 + `OKCSicilNo`: `8` (string, required) - Terminal code.
 
 
-## CancelBonusPaymentRequest (object)
+## CancelMilePaymentRequest (object)
 
 
 ### Properties
@@ -643,11 +643,11 @@ Representing an OAuth response.
 
 
 ### Properties
-+ `returnCode`: `0` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
-+ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
-+ `recognitionId`: `860444800` (number, required) - Kullanıcının GlobalMiles sistemindeki unique identifier değeri
-+ `availablePoint`: `0` (number, required) - Müşterinin bu işlemde kullanabileceği puanın TL karşılığıdır. Son iki karakter kuruşları temsil eder. Örneğin: 12.56 TL == 1256
-+ `loyaltyDiscountedPrice`: `9000` (number, required) - Sadakat indirimi. Son iki karakter kuruşları temsil eder. Örneğin: 90.50 TL == 9050
++ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
++ `recognitionId`: `860444800` (number, required) - Session based user identification number
++ `availablePoint`: `0` (number, required) - The available points that the customer can use in this transaction is in USD which is calculated from customer's current miles. EX: 12.56 USD == 1256
++ `loyaltyDiscountedPrice`: `9000` (number, required) - Loyalty discounted price ex: 90.50 USD == 9050
 
 
 ## GetCustomerInfoRequest (object)
@@ -656,8 +656,8 @@ Representing an OAuth response.
 ### Properties
 + `readCode`: `"5929000000"` (string, required) - Customer Identification Method ; GSM NO, Customer Unique ID or CODE
 + `readCodeType`: `1` (number, required) - 1: GSM NO, 2: Customer unique identifier, 3: CODE
-+ `totalAmount`: `10000` (number, required) - Total receipt amount.  ex:12.34 TL == 1234
-+ `totalVATAmount`: `1000` (number, required) - Total Tax Value. EX:1.34 TL == 134
++ `totalAmount`: `10000` (number, required) - Total receipt amount.  ex:12.34 USD == 1234
++ `totalVATAmount`: `1000` (number, required) - Total Tax Value. EX:1.34 USD == 134
 + `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
 
 
@@ -691,21 +691,21 @@ Representing an OAuth response.
 
 
 ### Properties
-+ `returnCode` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
-+ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
++ `returnCode` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
 
 
-## StartBonusPaymentResponse (object)
+## StartMilePaymentResponse (object)
 
 
 ### Properties
-+ `returnCode`: `0` (number, required) - 0 ise başarılı, 1 veya daha büyük ise başarısız
-+ `returnDesc` (string, required) - Başarılı ise boş, eğer hata varsa; hata mesajını içerir.
-+ `bonusPaymentProvisionId`: `"4"` (string, required) - Provizyon ID
-+ `OTPNeeded`: `true` (boolean, required) - Tek kullanımlık parola gerekli mi?
++ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
++ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
++ `bonusPaymentProvisionId`: `"4"` (string, required) - Provision ID for the payment
++ `OTPNeeded`: `true` (boolean, required) - Is a one-time password required?
 
 
-## CompleteBonusPaymentRequest (object)
+## CompleteMilePaymentRequest (object)
 
 
 ### Properties
