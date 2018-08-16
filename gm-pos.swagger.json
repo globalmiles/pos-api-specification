@@ -1,11 +1,11 @@
-﻿{
+{
   "swagger": "2.0",
   "info": {
-    "version": "1.0",
+    "version": "2.0",
     "title": "Global Miles POS API",
-    "description": "By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key. Ask us Please.\nBefore using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  \nDuring shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. \nPOS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .\n\nUse Your Mile(Bonus):\n\nAfter Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.\n\nCancel Payment with Miles:\nBy using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it ."
+    "description": "By integrating Global Miles POS APIs, Merchants can offer to the Global Miles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key.\nBefore using any endpoints of us, you need to authorize by using your Client ID / Client Secret to get access_token. \nDuring shopping cashier ask GlobalMiles user for GSM / FFP ID / Code or EMail and enter into POS. \nPOS software Post this info to Global Miles Server by using the endpoint GetCustomerInfo and get unique identifier in order to use at TransactionResult endpoint if you follow EarnMiles work Flow or use at  StartMilePayment endpoint if you follow use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalize the payment, as the payment done at POS post TransactionResult.\n\nPay with Miles:\nAfter Getting Customer Info, as all the items added to basket, Cashier ask for the payment method as the Global Miles selected as payment method, Pos software Post this info Global Miles Server by using the endpoint StartMilePayment.\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Global Miles server by the CompleteMilePayment endpoint.\n\nCancel Payment with Miles:\nBy using Get Mile Provision & CancelMilePayment endpoints  it allows to  list related sale on the POS and Cancel it ."
   },
-  "host": "default",
+  "host": "api.sandbox.globalmiles.com",
   "basePath": "/",
   "securityDefinitions": {
     "auth": {
@@ -17,7 +17,7 @@
     }
   },
   "schemes": [
-    "http"
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -26,14 +26,278 @@
     "application/json"
   ],
   "paths": {
-    "/v1/pos/TransactionResult": {
-      "post": {
-        "description": "After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Transaction Result",
+    "/v2/pos/payments/{miles_payment_provision_id}": {
+      "put": {
+        "description": "In order to finalize payment with miles use this endpoint. Use the OTP number which is send to user GSM on the Request body.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Complete Mile Payment",
         "tags": [
-          "Earn Miles"
+          "Pay with Miles"
         ],
-        "operationId": "V1PosTransactionResultPost",
+        "operationId": "V2PosPaymentsByMilesPaymentProvisionIdPut",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "miles_payment_provision_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Provision ID."
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "The body of the request.",
+            "schema": {
+              "$ref": "#/definitions/CompleteMilePaymentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CompleteMilePaymentResponse"
+            },
+            "examples": {
+              "application/json": {
+                "return_code": 0,
+                "return_desc": ""
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized - No valid API key provided.",
+            "schema": {}
+          },
+          "402": {
+            "description": "Request Failed - The parameters were valid but the request failed.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found - The requested resource doesn't exist.",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests - Too many requests hit the API too quickly.",
+            "schema": {}
+          },
+          "default": {
+            "description": "Server Error - Something went wrong.",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      },
+      "delete": {
+        "description": "In order to cancel payment with miles you can use this endpoint. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Cancel Mile Payment",
+        "tags": [
+          "Pay with Miles"
+        ],
+        "operationId": "V2PosPaymentsByMilesPaymentProvisionIdDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "miles_payment_provision_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Provision ID."
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "The body of the request.",
+            "schema": {
+              "$ref": "#/definitions/CancelMilePaymentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CancelMilePaymentResponse"
+            },
+            "examples": {
+              "application/json": {
+                "return_code": 0,
+                "return_desc": ""
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized - No valid API key provided.",
+            "schema": {}
+          },
+          "402": {
+            "description": "Request Failed - The parameters were valid but the request failed.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found - The requested resource doesn't exist.",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests - Too many requests hit the API too quickly.",
+            "schema": {}
+          },
+          "default": {
+            "description": "Server Error - Something went wrong.",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/v2/pos/payments": {
+      "get": {
+        "description": "Before cancelling the payment with miles this endpoint is used to list the related sale.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Get Mile Provisions",
+        "tags": [
+          "Pay with Miles"
+        ],
+        "operationId": "V2PosPaymentsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "read_code",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Customer Identification Method; GSM, FFP ID, CODE or EMAIL."
+          },
+          {
+            "name": "read_code_type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "1: GSM, 2: FFP ID, 3: CODE, 4: EMAIL"
+          },
+          {
+            "name": "terminal_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Terminal ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/GetMileProvisionsResponse"
+            },
+            "examples": {
+              "application/json": {
+                "return_code": 0,
+                "return_desc": "",
+                "payment_provisions": [
+                  {
+                    "miles_payment_provision_id": 5,
+                    "used_miles_as_amount": 12.0,
+                    "currency": "USD",
+                    "date_time": "2017-07-06T12:06:41.528Z"
+                  },
+                  {
+                    "miles_payment_provision_id": 6,
+                    "used_miles_as_amount": 17.0,
+                    "currency": "USD",
+                    "date_time": "2017-07-06T12:06:48.263Z"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized - No valid API key provided.",
+            "schema": {}
+          },
+          "402": {
+            "description": "Request Failed - The parameters were valid but the request failed.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found - The requested resource doesn't exist.",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests - Too many requests hit the API too quickly.",
+            "schema": {}
+          },
+          "default": {
+            "description": "Server Error - Something went wrong.",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      },
+      "post": {
+        "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this endpoint.\nAfter calling this endpoint successfully OTP code send to customer GSM number. This OTP must be used with Complete endpoint in order to complete payment.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Start Mile Payment",
+        "tags": [
+          "Pay with Miles"
+        ],
+        "operationId": "V2PosPaymentsPost",
         "produces": [
           "application/json"
         ],
@@ -44,7 +308,7 @@
             "required": true,
             "description": "The body of the request.",
             "schema": {
-              "$ref": "#/definitions/TransactionResultRequest"
+              "$ref": "#/definitions/StartMilePaymentRequest"
             }
           }
         ],
@@ -52,12 +316,14 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/TransactionResultResponse"
+              "$ref": "#/definitions/StartMilePaymentResponse"
             },
             "examples": {
               "application/json": {
-                "returnCode": 0,
-                "returnDesc": ""
+                "return_code": 0,
+                "return_desc": "",
+                "miles_payment_provision_id": 205,
+                "otp_needed": true
               }
             }
           },
@@ -171,14 +437,14 @@
         }
       }
     },
-    "/v1/pos/GetCustomerInfo": {
+    "/v2/pos/transaction_result": {
       "post": {
-        "description": "This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Get Customer Info",
+        "description": "After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Transaction Result",
         "tags": [
-          "Common"
+          "Earn Miles"
         ],
-        "operationId": "V1PosGetCustomerInfoPost",
+        "operationId": "V2PosTransactionResultPost",
         "produces": [
           "application/json"
         ],
@@ -189,8 +455,222 @@
             "required": true,
             "description": "The body of the request.",
             "schema": {
-              "$ref": "#/definitions/GetCustomerInfoRequest"
+              "$ref": "#/definitions/TransactionResultRequest"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TransactionResultResponse"
+            },
+            "examples": {
+              "application/json": {
+                "return_code": 0,
+                "return_desc": "",
+                "qr_data": "I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f",
+                "extra_info": ""
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized - No valid API key provided.",
+            "schema": {}
+          },
+          "402": {
+            "description": "Request Failed - The parameters were valid but the request failed.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found - The requested resource doesn't exist.",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests - Too many requests hit the API too quickly.",
+            "schema": {}
+          },
+          "default": {
+            "description": "Server Error - Something went wrong.",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/v2/pos/terminal_info": {
+      "get": {
+        "description": "This endpoint will help you to get terminal settings in order to use internal operations.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Get Terminal Info",
+        "tags": [
+          "Common"
+        ],
+        "operationId": "V2PosTerminalInfoGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "terminal_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Terminal ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/GetTerminalInfoResponse"
+            },
+            "examples": {
+              "application/json": {
+                "return_code": 0,
+                "return_desc": "",
+                "terminal_id": "A11708020243",
+                "receipt_header": "Earn Miles",
+                "receipt_footer": "Now join the world of Global Miles!",
+                "partner_id": 12,
+                "branch_id": 17,
+                "merchant_id_mandatory": true,
+                "default_currency": "USD"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized - No valid API key provided.",
+            "schema": {}
+          },
+          "402": {
+            "description": "Request Failed - The parameters were valid but the request failed.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found - The requested resource doesn't exist.",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests - Too many requests hit the API too quickly.",
+            "schema": {}
+          },
+          "default": {
+            "description": "Server Error - Something went wrong.",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/v2/pos/customer_info": {
+      "get": {
+        "description": "This endpoint will help you to get customer's miles amount as a currency and unique identifier value. Unique identifier value must be used by Transaction Result endpint in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Get Customer Info",
+        "tags": [
+          "Common"
+        ],
+        "operationId": "V2PosCustomerInfoGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "read_code",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Customer Identification Method; GSM, FFP ID, CODE or EMAIL"
+          },
+          {
+            "name": "read_code_type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "1: GSM, 2: FFP ID, 3: CODE, 4: EMAIL"
+          },
+          {
+            "name": "total_amount",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Total receipt amount."
+          },
+          {
+            "name": "total_vat_amount",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Total tax value."
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ISO-4217 3-letter currency code."
+          },
+          {
+            "name": "partner_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Partner ID."
+          },
+          {
+            "name": "branch_id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMaximum": false,
+            "exclusiveMinimum": false,
+            "description": "Branch ID."
+          },
+          {
+            "name": "terminal_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Terminal ID."
           }
         ],
         "responses": {
@@ -201,11 +681,12 @@
             },
             "examples": {
               "application/json": {
-                "returnCode": 0,
-                "returnDesc": "",
-                "recognitionId": 197,
-                "availablePoint": 350,
-                "loyaltyDiscountedPrice": 1000
+                "return_code": 0,
+                "return_desc": "",
+                "recognition_id": 197,
+                "available_miles_as_amount": 3.5,
+                "loyalty_discounted_total_amount": 9.0,
+                "currency": "USD"
               }
             }
           },
@@ -248,14 +729,14 @@
         }
       }
     },
-    "/v1/pos/StartBonusPayment": {
+    "/v2/pos/receipt_pictures": {
       "post": {
-        "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Start Mile Payment",
+        "description": "This endpoint will help you to upload receipt pictures which is related with a recognition ID and a transaction result.\n\nYou can try this endoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "summary": "Upload Receipt Pictures",
         "tags": [
-          "Pay with Miles"
+          "Common"
         ],
-        "operationId": "V1PosStartBonusPaymentPost",
+        "operationId": "V2PosReceiptPicturesPost",
         "produces": [
           "application/json"
         ],
@@ -266,7 +747,7 @@
             "required": true,
             "description": "The body of the request.",
             "schema": {
-              "$ref": "#/definitions/StartMilePaymentRequest"
+              "$ref": "#/definitions/ReceiptPictureRequest"
             }
           }
         ],
@@ -274,233 +755,14 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/StartMilePaymentResponse"
+              "$ref": "#/definitions/ReceiptPictureResponse"
             },
             "examples": {
               "application/json": {
-                "returnCode": 0,
-                "returnDesc": "",
-                "bonusPaymentProvisionId": "205",
-                "OTPNeeded": true
+                "return_code": "0",
+                "return_desc": ""
               }
             }
-          },
-          "400": {
-            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
-            "schema": {}
-          },
-          "401": {
-            "description": "Unauthorized - No valid API key provided.",
-            "schema": {}
-          },
-          "402": {
-            "description": "Request Failed - The parameters were valid but the request failed.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Not Found - The requested resource doesn't exist.",
-            "schema": {}
-          },
-          "429": {
-            "description": "Too Many Requests - Too many requests hit the API too quickly.",
-            "schema": {}
-          },
-          "default": {
-            "description": "Server Error - Something went wrong.",
-            "schema": {}
-          }
-        },
-        "security": [
-          {
-            "auth": []
-          }
-        ],
-        "x-unitTests": [],
-        "x-operation-settings": {
-          "CollectParameters": false,
-          "AllowDynamicQueryParameters": false,
-          "AllowDynamicFormParameters": false,
-          "IsMultiContentStreaming": false
-        }
-      }
-    },
-    "/v1/pos/CompleteBonusPayment": {
-      "post": {
-        "description": "In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Complete Mile Payment",
-        "tags": [
-          "Pay with Miles"
-        ],
-        "operationId": "V1PosCompleteBonusPaymentPost",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "The body of the request.",
-            "schema": {
-              "$ref": "#/definitions/CompleteMilePaymentRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CompleteMilePaymentResponse"
-            },
-            "examples": {
-              "application/json": {
-                "returnCode": 0,
-                "returnDesc": ""
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
-            "schema": {}
-          },
-          "401": {
-            "description": "Unauthorized - No valid API key provided.",
-            "schema": {}
-          },
-          "402": {
-            "description": "Request Failed - The parameters were valid but the request failed.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Not Found - The requested resource doesn't exist.",
-            "schema": {}
-          },
-          "429": {
-            "description": "Too Many Requests - Too many requests hit the API too quickly.",
-            "schema": {}
-          },
-          "default": {
-            "description": "Server Error - Something went wrong.",
-            "schema": {}
-          }
-        },
-        "security": [
-          {
-            "auth": []
-          }
-        ],
-        "x-unitTests": [],
-        "x-operation-settings": {
-          "CollectParameters": false,
-          "AllowDynamicQueryParameters": false,
-          "AllowDynamicFormParameters": false,
-          "IsMultiContentStreaming": false
-        }
-      }
-    },
-    "/v1/pos/CancelBonusPayment": {
-      "post": {
-        "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Cancel Mile Payment",
-        "tags": [
-          "Pay with Miles"
-        ],
-        "operationId": "V1PosCancelBonusPaymentPost",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "The body of the request.",
-            "schema": {
-              "$ref": "#/definitions/CancelMilePaymentRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CancelMilePaymentResponse"
-            },
-            "examples": {
-              "application/json": {
-                "returnCode": 0,
-                "returnDesc": ""
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
-            "schema": {}
-          },
-          "401": {
-            "description": "Unauthorized - No valid API key provided.",
-            "schema": {}
-          },
-          "402": {
-            "description": "Request Failed - The parameters were valid but the request failed.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Not Found - The requested resource doesn't exist.",
-            "schema": {}
-          },
-          "429": {
-            "description": "Too Many Requests - Too many requests hit the API too quickly.",
-            "schema": {}
-          },
-          "default": {
-            "description": "Server Error - Something went wrong.",
-            "schema": {}
-          }
-        },
-        "security": [
-          {
-            "auth": []
-          }
-        ],
-        "x-unitTests": [],
-        "x-operation-settings": {
-          "CollectParameters": false,
-          "AllowDynamicQueryParameters": false,
-          "AllowDynamicFormParameters": false,
-          "IsMultiContentStreaming": false
-        }
-      }
-    },
-    "/v1/pos/GetBonusProvisions": {
-      "post": {
-        "description": "Before cancelling the payment with Miles this API is used to list the related sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "summary": "Get Mile Provisions",
-        "tags": [
-          "Pay with Miles"
-        ],
-        "operationId": "V1PosGetBonusProvisionsPost",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "required": true,
-            "description": "The body of the request.",
-            "schema": {
-              "$ref": "#/definitions/GetMileProvisionsRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/GetBonusProvisionsResponse"
-            },
-            "examples": {}
           },
           "400": {
             "description": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
@@ -543,168 +805,236 @@
     }
   },
   "definitions": {
-    "CompleteMilePaymentResponse": {
-      "title": "CompleteMilePaymentResponse",
+    "CompleteMilePaymentRequest": {
+      "title": "CompleteMilePaymentRequest",
       "example": {
-        "returnCode": 0,
-        "returnDesc": ""
+        "terminal_id": "A11708020243",
+        "otp": "3636"
       },
       "type": "object",
       "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
-          "example": 0,
-          "type": "integer",
-          "format": "int32"
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "\"A11708020243\"",
+          "type": "string"
         },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
-          "example": "\"\"",
+        "otp": {
+          "description": "One time password that sends to customer phone.",
+          "example": "\"3636\"",
           "type": "string"
         }
       },
       "required": [
-        "returnCode",
-        "returnDesc"
+        "terminal_id",
+        "otp"
       ]
     },
-    "CancelMilePaymentResponse": {
-      "title": "CancelMilePaymentResponse",
+    "StartMilePaymentResponse": {
+      "title": "StartMilePaymentResponse",
       "example": {
-        "returnCode": 0,
-        "returnDesc": ""
+        "return_code": 0,
+        "return_desc": "",
+        "miles_payment_provision_id": 205,
+        "otp_needed": true
       },
       "type": "object",
       "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
           "example": 0,
           "type": "integer",
           "format": "int32"
         },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
           "example": "\"\"",
+          "type": "string"
+        },
+        "miles_payment_provision_id": {
+          "description": "Provision ID for the payment.",
+          "example": 205,
+          "type": "integer",
+          "format": "int32"
+        },
+        "otp_needed": {
+          "description": "Is a one-time password required?",
+          "example": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc",
+        "miles_payment_provision_id",
+        "otp_needed"
+      ]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "example": {
+        "invoice_type": "0",
+        "invoice_number": "17",
+        "invoice_date": "11.07.2018"
+      },
+      "type": "object",
+      "properties": {
+        "invoice_type": {
+          "description": "Type of the invoice.",
+          "example": "0",
+          "type": "string"
+        },
+        "invoice_number": {
+          "description": "Number of the invoice.",
+          "example": "17",
+          "type": "string"
+        },
+        "invoice_date": {
+          "description": "Date of the invoice.",
+          "example": "11.07.2018",
           "type": "string"
         }
       },
       "required": [
-        "returnCode",
-        "returnDesc"
+        "invoice_type",
+        "invoice_number",
+        "invoice_date"
       ]
     },
-    "GetMileProvisionsRequest": {
-      "title": "GetMileProvisionsRequest",
-      "description": "",
+    "Payment": {
+      "title": "Payment",
       "example": {
-        "readCode": "5929000000",
-        "readCodeType": "1",
-        "OKCSicilNo": "JH20085055"
+        "pay_amount": 10.0,
+        "payment_type": "100",
+        "miles_payment_provision_id": 5
       },
       "type": "object",
       "properties": {
-        "readCode": {
-          "description": "Customer Identification Method ; GSM NO, Customer Unique ID or CODE",
-          "example": "\"5929000000\"",
+        "pay_amount": {
+          "description": "Amount of the payment.",
+          "example": 10.0,
+          "type": "number",
+          "format": "double"
+        },
+        "payment_type": {
+          "description": "Type of the payment.",
+          "example": "\"100\"",
           "type": "string"
         },
-        "readCodeType": {
-          "description": "1: GSM NO, 2: Customer unique identifier, 3: CODE",
+        "miles_payment_provision_id": {
+          "description": "Provision ID for pay with miles.",
+          "example": 5,
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "pay_amount",
+        "payment_type"
+      ]
+    },
+    "GetCustomerInfoResponse": {
+      "title": "GetCustomerInfoResponse",
+      "example": {
+        "return_code": 0,
+        "return_desc": "",
+        "recognition_id": 197,
+        "available_miles_as_amount": 3.5,
+        "loyalty_discounted_total_amount": 9.0,
+        "currency": "USD"
+      },
+      "type": "object",
+      "properties": {
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
+          "example": 0,
+          "type": "integer",
+          "format": "int32"
+        },
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
+          "type": "string"
+        },
+        "recognition_id": {
+          "description": "Session based user identification number.",
+          "example": 197,
+          "type": "integer",
+          "format": "int32"
+        },
+        "available_miles_as_amount": {
+          "description": "The available miles as an amount that the customer can use in this transaction which is calculated from customer's current miles.",
+          "example": 3.5,
+          "type": "number",
+          "format": "double"
+        },
+        "loyalty_discounted_total_amount": {
+          "description": "Loyalty discounted total amount.",
+          "example": 9.0,
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "description": "ISO-4217 3-letter currency code.",
+          "example": "\"USD\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc",
+        "recognition_id",
+        "available_miles_as_amount",
+        "loyalty_discounted_total_amount",
+        "currency"
+      ]
+    },
+    "Discount": {
+      "title": "Discount",
+      "example": {
+        "origin": "1",
+        "type": "0",
+        "value": 3.0
+      },
+      "type": "object",
+      "properties": {
+        "origin": {
+          "description": "Origin of the discount. 1: Global Miles, 2: Other.",
           "example": "\"1\"",
           "type": "string"
         },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
-          "example": "\"JH20085055\"",
+        "type": {
+          "description": "Type of the discount. 0: amount based, 1: rate based.",
+          "example": "\"0\"",
           "type": "string"
+        },
+        "value": {
+          "description": "Value of the discount.",
+          "example": 3.0,
+          "type": "number",
+          "format": "double"
         }
       },
       "required": [
-        "readCode",
-        "readCodeType",
-        "OKCSicilNo"
+        "origin",
+        "type",
+        "value"
       ]
     },
-    "GetBonusProvisionsResponse": {
-      "title": "GetBonusProvisionsResponse",
-      "type": "object",
-      "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
-          "type": "integer",
-          "format": "int32"
-        },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
-          "type": "string"
-        },
-        "bonusProvisions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/MileProvision"
-          }
-        }
-      },
-      "required": [
-        "returnCode",
-        "returnDesc",
-        "bonusProvisions"
-      ]
-    },
-    "MileProvision": {
-      "title": "MileProvision",
-      "type": "object",
-      "properties": {
-        "bonusPaymentProvisionId": {
-          "description": "Provision ID",
-          "type": "string"
-        },
-        "usedBonusAmount": {
-          "description": "Used Bonus Amount",
-          "type": "integer",
-          "format": "int32"
-        },
-        "dateTime": {
-          "description": "Date/time",
-          "type": "string"
-        }
-      },
-      "required": [
-        "bonusPaymentProvisionId",
-        "usedBonusAmount",
-        "dateTime"
-      ]
-    },
-    "OAuthRequest": {
-      "title": "OAuthRequest",
-      "description": "Representing an OAuth request.",
+    "CancelMilePaymentRequest": {
+      "title": "CancelMilePaymentRequest",
       "example": {
-        "client_id": "552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66",
-        "client_secret": "d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-        "grant_type": "client_credentials"
+        "terminal_id": "A11708020243"
       },
       "type": "object",
       "properties": {
-        "client_id": {
-          "description": "ID of the client which is provided by Global Miles.",
-          "example": "552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66",
-          "type": "string"
-        },
-        "client_secret": {
-          "description": "Secret of the client which is provided by Global Miles.",
-          "example": "d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b",
-          "type": "string"
-        },
-        "grant_type": {
-          "description": "Type of the OAuth flows. We support only one type of token: client_credentials",
-          "example": "client_credentials",
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "\"A11708020243\"",
           "type": "string"
         }
       },
       "required": [
-        "client_id",
-        "client_secret",
-        "grant_type"
+        "terminal_id"
       ]
     },
     "OAuthResponse": {
@@ -739,90 +1069,199 @@
         "created_at"
       ]
     },
-    "TransactionResultRequest": {
-      "title": "TransactionResultRequest",
+    "OAuthRequest": {
+      "title": "OAuthRequest",
+      "description": "Representing an OAuth request.",
       "example": {
-        "totalReceiptAmount": "2000",
-        "totalVATAmount": "1000",
-        "OKCSicilNo": "JH20085055",
-        "ReceiptNo": "0007",
-        "Zno": "15",
-        "EkuNo": "03",
-        "recognitionId": 197,
-        "ReceiptType": "1",
-        "ReceiptDateTime": "150420171530",
-        "InvoiceInfo": {
-          "invoiceType": "0",
-          "invoiceNo": "17",
-          "invoiceDate": "15.04.2017"
-        },
-        "Payments": [
-          {
-            "payAmount": "2000",
-            "paymentType": "1"
-          }
-        ],
-        "Discounts": [
-          {
-            "orijin": "",
-            "type": "",
-            "value": ""
-          }
-        ]
+        "client_id": "b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df",
+        "client_secret": "4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
+        "grant_type": "client_credentials"
       },
       "type": "object",
       "properties": {
-        "totalReceiptAmount": {
-          "description": "Total Receipt Amount  ex:12.35 TL == 1235",
-          "type": "integer",
-          "format": "int32"
-        },
-        "totalVATAmount": {
-          "description": "Total VAT Amount  ex: 0.85 TL == 85",
-          "type": "integer",
-          "format": "int32"
-        },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
+        "client_id": {
+          "description": "ID of the client which is provided by Global Miles.",
+          "example": "b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df",
           "type": "string"
         },
-        "ReceiptNo": {
-          "description": "ReceiptNo",
-          "type": "integer",
-          "format": "int32"
-        },
-        "Zno": {
-          "description": "Z no",
-          "type": "integer",
-          "format": "int32"
-        },
-        "recognitionId": {
-          "description": "Session based Identification Number .",
-          "type": "integer",
-          "format": "int32"
-        },
-        "EkuNo": {
-          "description": "Eku no (Electronic Journal)",
-          "type": "integer",
-          "format": "int32"
-        },
-        "ReceiptType": {
-          "description": "Receipt Type (Invoice , Food ..)",
+        "client_secret": {
+          "description": "Secret of the client which is provided by Global Miles.",
+          "example": "4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c",
           "type": "string"
         },
-        "ReceiptDateTime": {
-          "description": "It should be  GGAAYYYYSSDD formatted.",
+        "grant_type": {
+          "description": "Type of the OAuth flows. We support only one type of token: client_credentials",
+          "example": "client_credentials",
+          "type": "string"
+        }
+      },
+      "required": [
+        "client_id",
+        "client_secret",
+        "grant_type"
+      ]
+    },
+    "MileProvision": {
+      "title": "MileProvision",
+      "example": {
+        "miles_payment_provision_id": 5,
+        "used_miles_as_amount": 12.0,
+        "currency": "USD",
+        "date_time": "2017-07-06T12:06:41.528Z"
+      },
+      "type": "object",
+      "properties": {
+        "miles_payment_provision_id": {
+          "description": "Provision ID",
+          "example": 5,
+          "type": "integer",
+          "format": "int32"
+        },
+        "used_miles_as_amount": {
+          "description": "Used amount",
+          "example": 12.0,
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "description": "ISO-4217 3-letter currency code.",
+          "example": "\"USD\"",
           "type": "string"
         },
-        "InvoiceInfo": {
+        "date_time": {
+          "description": "Date time of the mile provision.",
+          "example": "\"2017-07-06T12:06:41.528Z\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "miles_payment_provision_id",
+        "used_miles_as_amount",
+        "currency",
+        "date_time"
+      ]
+    },
+    "TransactionResultRequest": {
+      "title": "TransactionResultRequest",
+      "example": {
+        "total_receipt_amount": 20.0,
+        "total_vat_amount": 1.18,
+        "currency": "USD",
+        "partner_id": 12,
+        "branch_id": 17,
+        "terminal_id": "A11708020243",
+        "receipt_number": "0007",
+        "extra_number_1": "15",
+        "extra_number_2": "03",
+        "recognition_id": 197,
+        "receipt_type": "1",
+        "receipt_date_time": "110720181530",
+        "invoice_info": {
+          "invoice_type": "0",
+          "invoice_number": "17",
+          "invoice_date": "11.07.2018"
+        },
+        "payments": [
+          {
+            "pay_amount": 10.0,
+            "payment_type": "1"
+          },
+          {
+            "pay_amount": 10.0,
+            "payment_type": "100",
+            "miles_payment_provision_id": 5
+          }
+        ],
+        "discounts": [
+          {
+            "origin": "1",
+            "type": "0",
+            "value": 3.0
+          }
+        ],
+        "extra_data": ""
+      },
+      "type": "object",
+      "properties": {
+        "total_receipt_amount": {
+          "description": "Total receipt amount.",
+          "example": 20.0,
+          "type": "number",
+          "format": "double"
+        },
+        "total_vat_amount": {
+          "description": "Total tax amount.",
+          "example": 5.0,
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "description": "ISO-4217 3-letter currency code.",
+          "example": "USD",
+          "type": "string"
+        },
+        "partner_id": {
+          "description": "Partner ID.",
+          "example": 12,
+          "type": "integer",
+          "format": "int32"
+        },
+        "branch_id": {
+          "description": "Branch ID.",
+          "example": 17,
+          "type": "integer",
+          "format": "int32"
+        },
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "A11708020243",
+          "type": "string"
+        },
+        "receipt_number": {
+          "description": "Receipt number.",
+          "example": "0007",
+          "type": "string"
+        },
+        "extra_number_1": {
+          "description": "Extra number 1.",
+          "example": "15",
+          "type": "string"
+        },
+        "extra_number_2": {
+          "description": "Extra number 2.",
+          "example": "03",
+          "type": "string"
+        },
+        "recognition_id": {
+          "description": "Session based identification number.",
+          "example": 197,
+          "type": "integer",
+          "format": "int32"
+        },
+        "receipt_type": {
+          "description": "Receipt type (Invoice , Food ..)",
+          "example": "1",
+          "type": "string"
+        },
+        "receipt_date_time": {
+          "description": "It should be DDMMYYYYHHMM formatted.",
+          "example": "110720181530",
+          "type": "string"
+        },
+        "invoice_info": {
           "$ref": "#/definitions/Invoice"
         },
-        "Payments": {
-          "description": "Payment Detail Block",
+        "payments": {
+          "description": "Payment details.",
           "example": [
             {
-              "payAmount": "2000",
-              "paymentType": "1"
+              "pay_amount": 10.0,
+              "payment_type": "1"
+            },
+            {
+              "pay_amount": 10.0,
+              "payment_type": "100",
+              "miles_payment_provision_id": 5
             }
           ],
           "type": "array",
@@ -830,365 +1269,376 @@
             "$ref": "#/definitions/Payment"
           }
         },
-        "Discounts": {
-          "description": "",
+        "discounts": {
+          "description": "Discount details.",
           "example": [
             {
-              "orijin": "",
-              "type": "",
-              "value": ""
+              "origin": "1",
+              "type": "0",
+              "value": 3.0
             }
           ],
           "type": "array",
           "items": {
             "$ref": "#/definitions/Discount"
           }
+        },
+        "extra_data": {
+          "description": "Extra data.",
+          "example": "\"\"",
+          "type": "string"
         }
       },
       "required": [
-        "totalReceiptAmount",
-        "totalVATAmount",
-        "OKCSicilNo",
-        "ReceiptNo",
-        "Zno",
-        "recognitionId",
-        "EkuNo",
-        "ReceiptType",
-        "ReceiptDateTime",
-        "InvoiceInfo",
-        "Payments",
-        "Discounts"
+        "total_receipt_amount",
+        "total_vat_amount",
+        "currency",
+        "partner_id",
+        "branch_id",
+        "terminal_id",
+        "receipt_number",
+        "extra_number_1",
+        "extra_number_2",
+        "recognition_id",
+        "receipt_type",
+        "receipt_date_time"
+      ]
+    },
+    "CancelMilePaymentResponse": {
+      "title": "CancelMilePaymentResponse",
+      "example": {
+        "return_code": 0,
+        "return_desc": ""
+      },
+      "type": "object",
+      "properties": {
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
+          "example": 0,
+          "type": "integer",
+          "format": "int32"
+        },
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message",
+          "example": "\"\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc"
+      ]
+    },
+    "CompleteMilePaymentResponse": {
+      "title": "CompleteMilePaymentResponse",
+      "example": {
+        "return_code": 0,
+        "return_desc": ""
+      },
+      "type": "object",
+      "properties": {
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
+          "example": 0,
+          "type": "integer",
+          "format": "int32"
+        },
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc"
       ]
     },
     "StartMilePaymentRequest": {
       "title": "StartMilePaymentRequest",
       "example": {
-        "totalReceiptAmount": 600,
-        "usedBonusAmount": 300,
-        "recognitionId": 8,
-        "OKCSicilNo": "ABCDEFG123"
+        "total_receipt_amount": 10.0,
+        "used_miles_as_amount": 3.0,
+        "currency": "USD",
+        "recognition_id": 197,
+        "terminal_id": "A11708020243"
       },
       "type": "object",
       "properties": {
-        "totalReceiptAmount": {
-          "description": "Total Receipt Amount  ex:12.35 TL == 1235",
-          "example": 300,
+        "total_receipt_amount": {
+          "description": "Total receipt amount.",
+          "example": 10.0,
+          "type": "number",
+          "format": "double"
+        },
+        "used_miles_as_amount": {
+          "description": "Used amount that has been used in the shopping.",
+          "example": 3.0,
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "description": "ISO-4217 3-letter currency code.",
+          "example": "\"USD\"",
+          "type": "string"
+        },
+        "recognition_id": {
+          "description": "Session based user identification number.",
+          "example": 197,
           "type": "integer",
           "format": "int32"
         },
-        "usedBonusAmount": {
-          "description": "Used Amount that has been used in the shopping  ex:0.85 TL == 85",
-          "example": 600,
-          "type": "integer",
-          "format": "int32"
-        },
-        "recognitionId": {
-          "description": "Session based user identification number",
-          "example": 8,
-          "type": "integer",
-          "format": "int32"
-        },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
-          "example": "8",
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "\"A11708020243\"",
           "type": "string"
         }
       },
       "required": [
-        "totalReceiptAmount",
-        "usedBonusAmount",
-        "recognitionId",
-        "OKCSicilNo"
+        "total_receipt_amount",
+        "used_miles_as_amount",
+        "currency",
+        "recognition_id",
+        "terminal_id"
       ]
     },
-    "CancelMilePaymentRequest": {
-      "title": "CancelMilePaymentRequest",
+    "GetMileProvisionsResponse": {
+      "title": "GetMileProvisionsResponse",
       "example": {
-        "bonusPaymentProvisionId": "206",
-        "OKCSicilNo": "JH20085055"
+        "return_code": 0,
+        "return_desc": "",
+        "payment_provisions": [
+          {
+            "miles_payment_provision_id": 5,
+            "used_miles_as_amount": 12.0,
+            "currency": "USD",
+            "date_time": "2017-07-06T12:06:41.528Z"
+          },
+          {
+            "miles_payment_provision_id": 6,
+            "used_miles_as_amount": 17.0,
+            "currency": "USD",
+            "date_time": "2017-07-06T12:06:48.263Z"
+          }
+        ]
       },
       "type": "object",
       "properties": {
-        "bonusPaymentProvisionId": {
-          "description": "Provision ID",
-          "example": "\"206\"",
-          "type": "string"
-        },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
-          "example": "\"JH20085055\"",
-          "type": "string"
-        }
-      },
-      "required": [
-        "bonusPaymentProvisionId",
-        "OKCSicilNo"
-      ]
-    },
-    "GetCustomerInfoResponse": {
-      "title": "GetCustomerInfoResponse",
-      "example": {
-        "returnCode": 0,
-        "returnDesc": "",
-        "recognitionId": 860444800,
-        "availablePoint": 0,
-        "loyaltyDiscountedPrice": 9000
-      },
-      "type": "object",
-      "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
           "example": 0,
           "type": "integer",
           "format": "int32"
         },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
           "type": "string"
         },
-        "recognitionId": {
-          "description": "Session based user identification number",
-          "example": 860444800,
-          "type": "integer",
-          "format": "int32"
-        },
-        "availablePoint": {
-          "description": "The available points that the customer can use in this transaction is in USD which is calculated from customer's current miles. EX: 12.56 USD == 1256",
+        "payment_provisions": {
+          "description": "A collection of the payments.",
+          "example": [
+            {
+              "miles_payment_provision_id": 5,
+              "used_miles_as_amount": 12.0,
+              "currency": "USD",
+              "date_time": "2017-07-06T12:06:41.528Z"
+            },
+            {
+              "miles_payment_provision_id": 6,
+              "used_miles_as_amount": 17.0,
+              "currency": "USD",
+              "date_time": "2017-07-06T12:06:48.263Z"
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MileProvision"
+          }
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc",
+        "payment_provisions"
+      ]
+    },
+    "GetTerminalInfoResponse": {
+      "title": "GetTerminalInfoResponse",
+      "example": {
+        "return_code": 0,
+        "return_desc": "",
+        "terminal_id": "A11708020243",
+        "receipt_header": "Earn Miles",
+        "receipt_footer": "Now join the world of Global Miles!",
+        "partner_id": 12,
+        "branch_id": 17,
+        "merchant_id_mandatory": true,
+        "default_currency": "USD"
+      },
+      "type": "object",
+      "properties": {
+        "return_code": {
+          "description": "0 Success, 1 and bigger than 1 unsuccessful.",
           "example": 0,
           "type": "integer",
           "format": "int32"
         },
-        "loyaltyDiscountedPrice": {
-          "description": "Loyalty discounted price ex: 90.50 USD == 9050",
-          "example": 9000,
-          "type": "integer",
-          "format": "int32"
-        }
-      },
-      "required": [
-        "returnCode",
-        "returnDesc",
-        "recognitionId",
-        "availablePoint",
-        "loyaltyDiscountedPrice"
-      ]
-    },
-    "GetCustomerInfoRequest": {
-      "title": "GetCustomerInfoRequest",
-      "example": {
-        "readCode": "5929000000",
-        "readCodeType": "1",
-        "totalAmount": "10000",
-        "totalVATAmount": "1000",
-        "OKCSicilNo": "JH20085055"
-      },
-      "type": "object",
-      "properties": {
-        "readCode": {
-          "description": "Customer Identification Method ; GSM NO, Customer Unique ID or CODE",
-          "example": "\"5929000000\"",
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
           "type": "string"
         },
-        "readCodeType": {
-          "description": "1: GSM NO, 2: Customer unique identifier, 3: CODE",
-          "example": 1,
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "A11708020243",
+          "type": "string"
+        },
+        "receipt_header": {
+          "description": "Header text for the receipt.",
+          "example": "Earn Miles",
+          "type": "string"
+        },
+        "receipt_footer": {
+          "description": "Footer text for the receipt.",
+          "example": "Now join the world of Global Miles!",
+          "type": "string"
+        },
+        "partner_id": {
+          "description": "Partner ID.",
+          "example": 12,
           "type": "integer",
           "format": "int32"
         },
-        "totalAmount": {
-          "description": "Total receipt amount.  ex:12.34 USD == 1234",
-          "example": 10000,
+        "branch_id": {
+          "description": "Branch ID.",
+          "example": 17,
           "type": "integer",
           "format": "int32"
         },
-        "totalVATAmount": {
-          "description": "Total Tax Value. EX:1.34 USD == 134",
-          "example": 1000,
-          "type": "integer",
-          "format": "int32"
+        "merchant_id_mandatory": {
+          "description": "Indicates whether the merchant ID parameter is required in the Transaction Result request.",
+          "example": true,
+          "type": "boolean"
         },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
-          "example": "\"JH20085055\"",
+        "default_currency": {
+          "description": "ISO-4217 3-letter default currency code for the partner.",
+          "example": "USD",
           "type": "string"
         }
       },
       "required": [
-        "readCode",
-        "readCodeType",
-        "totalAmount",
-        "totalVATAmount",
-        "OKCSicilNo"
-      ]
-    },
-    "Discount": {
-      "title": "Discount",
-      "example": {
-        "orijin": "",
-        "type": "",
-        "value": ""
-      },
-      "type": "object",
-      "properties": {
-        "orijin": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "orijin",
-        "type",
-        "value"
-      ]
-    },
-    "Payment": {
-      "title": "Payment",
-      "example": {
-        "payAmount": 2000,
-        "paymentType": 1
-      },
-      "type": "object",
-      "properties": {
-        "payAmount": {
-          "example": 2000,
-          "type": "integer",
-          "format": "int32"
-        },
-        "paymentType": {
-          "example": 1,
-          "type": "integer",
-          "format": "int32"
-        }
-      },
-      "required": [
-        "payAmount",
-        "paymentType"
-      ]
-    },
-    "Invoice": {
-      "title": "Invoice",
-      "example": {
-        "invoiceType": "0",
-        "invoiceNo": "17",
-        "invoiceDate": "15.04.2017"
-      },
-      "type": "object",
-      "properties": {
-        "invoiceType": {
-          "example": "0",
-          "type": "string"
-        },
-        "invoiceNo": {
-          "description": "",
-          "example": "17",
-          "type": "string"
-        },
-        "invoiceDate": {
-          "example": "15.04.2017",
-          "type": "string"
-        }
-      },
-      "required": [
-        "invoiceType",
-        "invoiceNo",
-        "invoiceDate"
+        "return_code",
+        "return_desc",
+        "terminal_id",
+        "receipt_header",
+        "receipt_footer",
+        "partner_id",
+        "branch_id",
+        "merchant_id_mandatory",
+        "default_currency"
       ]
     },
     "TransactionResultResponse": {
       "title": "TransactionResultResponse",
       "example": {
-        "returnCode": 0,
-        "returnDesc": ""
+        "return_code": 0,
+        "return_desc": "",
+        "qr_data": "I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f",
+        "extra_info": ""
       },
       "type": "object",
       "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
-          "type": "integer",
-          "format": "int32"
-        },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "returnCode",
-        "returnDesc"
-      ]
-    },
-    "StartMilePaymentResponse": {
-      "title": "StartMilePaymentResponse",
-      "example": {
-        "returnCode": 0,
-        "returnDesc": "",
-        "bonusPaymentProvisionId": "4",
-        "OTPNeeded": true
-      },
-      "type": "object",
-      "properties": {
-        "returnCode": {
-          "description": "0  Success, 1 and bigger than 1 unsuccessful",
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
           "example": 0,
           "type": "integer",
           "format": "int32"
         },
-        "returnDesc": {
-          "description": "if success return is empty. if unsuccessful it returns error message",
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
           "type": "string"
         },
-        "bonusPaymentProvisionId": {
-          "description": "Provision ID for the payment",
-          "example": "\"4\"",
+        "qr_data": {
+          "description": "Text data to be used for printing the receipt.",
+          "example": "\"I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f\"",
           "type": "string"
         },
-        "OTPNeeded": {
-          "description": "Is a one-time password required?",
-          "example": true,
-          "type": "boolean"
+        "extra_info": {
+          "description": "Extra information for generel usage.",
+          "example": "\"\"",
+          "type": "string"
         }
       },
       "required": [
-        "returnCode",
-        "returnDesc",
-        "bonusPaymentProvisionId",
-        "OTPNeeded"
+        "return_code",
+        "return_desc",
+        "qr_data",
+        "extra_info"
       ]
     },
-    "CompleteMilePaymentRequest": {
-      "title": "CompleteMilePaymentRequest",
+    "ReceiptPictureRequest": {
+      "title": "ReceiptPictureRequest",
       "example": {
-        "bonusPaymentProvisionId": "206",
-        "OKCSicilNo": "JH20085055",
-        "OTP": "3636"
+        "terminal_id": "A11708020243",
+        "recognition_id": 200,
+        "file_name": "200_15899263622_01.png",
+        "picture": "iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAA4icSUVORK5CYII="
       },
       "type": "object",
       "properties": {
-        "bonusPaymentProvisionId": {
-          "description": "Provision ID",
-          "example": "\"206\"",
+        "terminal_id": {
+          "description": "Terminal ID.",
+          "example": "A11708020243",
           "type": "string"
         },
-        "OKCSicilNo": {
-          "description": "Terminal code.",
-          "example": "\"JH20085055\"",
+        "recognition_id": {
+          "description": "Session based user identification number.",
+          "example": 200,
+          "type": "integer",
+          "format": "int32"
+        },
+        "file_name": {
+          "description": "File name of the picture.",
+          "example": "200_15899263622_01.png",
           "type": "string"
         },
-        "OTP": {
-          "description": "One time password that sends to customer phone",
-          "example": "\"3636\"",
+        "picture": {
+          "description": "Base64 encoded binary picture data.",
+          "example": "iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAA4icSUVORK5CYII=",
           "type": "string"
         }
       },
       "required": [
-        "bonusPaymentProvisionId",
-        "OKCSicilNo",
-        "OTP"
+        "terminal_id",
+        "recognition_id",
+        "file_name",
+        "picture"
+      ]
+    },
+    "ReceiptPictureResponse": {
+      "title": "ReceiptPictureResponse",
+      "example": {
+        "return_code": "0",
+        "return_desc": ""
+      },
+      "type": "object",
+      "properties": {
+        "return_code": {
+          "description": "0  Success, 1 and bigger than 1 unsuccessful.",
+          "example": "0",
+          "type": "string"
+        },
+        "return_desc": {
+          "description": "if success return is empty. if unsuccessful it returns error message.",
+          "example": "\"\"",
+          "type": "string"
+        }
+      },
+      "required": [
+        "return_code",
+        "return_desc"
       ]
     }
   }
