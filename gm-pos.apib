@@ -1,8 +1,8 @@
-﻿FORMAT: 1A
+FORMAT: 1A
 HOST: https://api.sandbox.globalmiles.com
 
 # Global Miles POS API
-By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.
+By integrating Global Miles POS APIs, Merchants can offer to the Global Miles users  earn mile and shop with their miles in their in-stores.
 
 
 
@@ -12,37 +12,35 @@ Common to dos both for Earn/Pay with miles.
 
 
 
-We will provide Client ID/ Secret Key. Ask us Please.
+We will provide Client ID/ Secret Key.
 
-Before using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  
+Before using any endpoints of us, you need to authorize by using your Client ID / Client Secret to get access_token. 
 
-During shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. 
+During shopping cashier ask GlobalMiles user for GSM / FFP ID / Code or EMail and enter into POS. 
 
-POS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. 
+POS software Post this info to Global Miles Server by using the endpoint GetCustomerInfo and get unique identifier in order to use at TransactionResult endpoint if you follow EarnMiles work Flow or use at  StartMilePayment endpoint if you follow use your Miles work flow. 
 
 
 
 Earn Mile: 
 
-After Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .
+After Getting Customer Info, Cashier will finalize the payment, as the payment done at POS post TransactionResult.
 
 
 
-Use Your Mile(Bonus):
+Pay with Miles:
+
+After Getting Customer Info, as all the items added to basket, Cashier ask for the payment method as the Global Miles selected as payment method, Pos software Post this info Global Miles Server by using the endpoint StartMilePayment.
 
 
 
-After Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .
-
-
-
-An OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.
+An OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Global Miles server by the CompleteMilePayment endpoint.
 
 
 
 Cancel Payment with Miles:
 
-By using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .
+By using Get Mile Provision & CancelMilePayment endpoints  it allows to  list related sale on the POS and Cancel it .
 
 ## Authentication
 This API uses OAuth v2 Client Credentials Grant for its authentication.
@@ -50,31 +48,272 @@ This API uses OAuth v2 Client Credentials Grant for its authentication.
 The properties required for this OAuth implentation are as follows:
 + Access Token Url - /oauth/token
 
-# Group Earn Miles
+# Group Pay with Miles
 
-## V1 Pos TransactionResult [/v1/pos/TransactionResult]
+## V2 Pos Payments [/v2/pos/payments/{miles_payment_provision_id}]
 
-### Transaction Result [POST]
-After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.
++ Parameters
+    + miles_payment_provision_id (number, required)
+
+        Provision ID.{INT}
+
+        + Sample: 5
+
+### Cancel Mile Payment [DELETE]
+In order to cancel payment with miles you can use this endpoint. It allows to cancel payment only related GSM and terminal ID numbers.
 
 
 
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
 
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
 
 + Request (application/json)
-    + Attributes (TransactionResultRequest)
+    + Attributes (CancelMilePaymentRequest)
 
 
 + Response 200 (application/json)
-    + Attributes (TransactionResultResponse)
+    + Attributes (CancelMilePaymentResponse)
 
     + Body
 
             {
-              "returnCode": 0,
-              "returnDesc": ""
+                "return_code": 0,
+                "return_desc": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+### Complete Mile Payment [PUT]
+In order to finalize payment with miles use this endpoint. Use the OTP number which is send to user GSM on the Request body.
+
+
+
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
+
++ Request (application/json)
+    + Attributes (CompleteMilePaymentRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (CompleteMilePaymentResponse)
+
+    + Body
+
+            {
+              "return_code": 0,
+              "return_desc": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V2 Pos Payments [/v2/pos/payments]
+
+### Start Mile Payment [POST]
+After getting customer info's and RecognitionID to start Payment with Miles Use this endpoint.
+
+After calling this endpoint successfully OTP code send to customer GSM number. This OTP must be used with Complete endpoint in order to complete payment.
+
+
+
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
+
++ Request (application/json)
+    + Attributes (StartMilePaymentRequest)
+
+
++ Response 200 (application/json)
+    + Attributes (StartMilePaymentResponse)
+
+    + Body
+
+            {
+              "return_code": 0,
+              "return_desc": "",
+              "miles_payment_provision_id": 205,
+              "otp_needed": true
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V2 Pos Payments [/v2/pos/payments{?read_code,read_code_type,terminal_id}]
+
+### Get Mile Provisions [GET]
+Before cancelling the payment with miles this endpoint is used to list the related sale.
+
+
+
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
++ Parameters
+    + read_code (string, required)
+
+        Customer Identification Method; GSM, FFP ID, CODE or EMAIL.
+
+        + Sample: 5929000000
+    + read_code_type (string, required)
+
+        1: GSM, 2: FFP ID, 3: CODE, 4: EMAIL
+
+        + Sample: 1
+    + terminal_id (string, required)
+
+        Terminal ID.
+
+        + Sample: A11708020243
+
++ Response 200 (application/json)
+    + Attributes (GetMileProvisionsResponse)
+
+    + Body
+
+            {
+              "return_code": 0,
+              "return_desc": "",
+              "payment_provisions": [
+                  {
+                      "miles_payment_provision_id": 5,
+                      "used_miles_as_amount": 12.00,
+                      "currency": "USD",
+                      "date_time": "2017-07-06T12:06:41.528Z"
+                  },
+                  {
+                      "miles_payment_provision_id": 6,
+                      "used_miles_as_amount": 17.00,
+                      "currency": "USD",
+                      "date_time": "2017-07-06T12:06:48.263Z"
+                  }
+              ]
             }
 
 
@@ -189,22 +428,215 @@ An access token will allow you to make requests for the system. We support only 
 
 
 
-# Group Common
+# Group Earn Miles
 
-## V1 Pos GetCustomerInfo [/v1/pos/GetCustomerInfo]
+## V2 Pos Transaction Result [/v2/pos/transaction_result]
 
-### Get Customer Info [POST]
-This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.
+### Transaction Result [POST]
+After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.
 
 
 
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
 
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
 
 + Request (application/json)
-    + Attributes (GetCustomerInfoRequest)
+    + Attributes (TransactionResultRequest)
 
+
++ Response 200 (application/json)
+    + Attributes (TransactionResultResponse)
+
+    + Body
+
+            {
+                "return_code": 0,
+                "return_desc": "",
+                "qr_data": "I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f",
+                "extra_info": ""
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+
+# Group Common
+
+## V2 Pos Terminal Info [/v2/pos/terminal_info]
+
+### Get Terminal Info [GET]
+This endpoint will help you to get terminal settings in order to use internal operations.
+
+
+
+You can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
++ Attributes
+    + terminal_id (string, required)
+
+        Terminal ID.
+
+        + Sample: A11708020243
+
++ Response 200 (application/json)
+    + Attributes (GetTerminalInfoResponse)
+
+    + Body
+
+            {
+              "return_code": 0,
+              "return_desc": "",
+              "terminal_id": "A11708020243",
+              "receipt_header": "Earn Miles",
+              "receipt_footer": "Now join the world of Global Miles!",
+              "partner_id": 12,
+              "branch_id": 17,
+              "merchant_id_mandatory": true,
+              "default_currency": "USD"
+            }
+
+
++ Response 400 
+
+        Bad Request    - The request was unacceptable, often due to missing a required parameter.
+
+
+
+
++ Response 401 
+
+        Unauthorized - No valid API key provided.
+
+
+
+
++ Response 402 
+
+        Request Failed - The parameters were valid but the request failed.
+
+
+
+
++ Response 404 
+
+        Not Found - The requested resource doesn't exist.
+
+
+
+
++ Response 429 
+
+        Too Many Requests - Too many requests hit the API too quickly.
+
+
+
+
++ Response 500 
+
+        Server Error - Something went wrong.
+
+
+
+
+
+## V2 Pos Customer Info [/v2/pos/customer_info{?read_code,read_code_type,total_amount,total_vat_amount,currency,partner_id,branch_id,terminal_id}]
+
+### Get Customer Info [GET]
+This endpoint will help you to get customer's miles amount as a currency and unique identifier value. Unique identifier value must be used by Transaction Result endpint in order to complete shopping.
+
+
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
++ Parameters
+    + read_code (string, required)
+
+        Customer Identification Method; GSM, FFP ID, CODE or EMAIL
+
+        + Sample: 5929000000
+    + read_code_type (string, required)
+
+        1: GSM, 2: FFP ID, 3: CODE, 4: EMAIL
+
+        + Sample: 1
+    + total_amount (number, required)
+
+        Total receipt amount.
+
+        + Sample: 10.00
+    + total_vat_amount (number, required)
+
+        Total tax value.
+
+        + Sample: 0.18
+    + currency (string, required)
+
+        ISO-4217 3-letter currency code.
+
+        + Sample: USD
+    + partner_id (number, required)
+
+        Partner ID.
+
+        + Sample: 12
+    + branch_id (number, required)
+
+        Branch ID.
+
+        + Sample: 17
+    + terminal_id (string, required)
+
+        Terminal ID.
+
+        + Sample: A11708020243
 
 + Response 200 (application/json)
     + Attributes (GetCustomerInfoResponse)
@@ -212,11 +644,12 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
     + Body
 
             {
-              "returnCode": 0,
-              "returnDesc": "",
-              "recognitionId": 197,
-              "availablePoint": 350,
-              "loyaltyDiscountedPrice": 1000
+                "return_code": 0,
+                "return_desc": "",
+                "recognition_id": 197,
+                "available_miles_as_amount": 3.50,
+                "loyalty_discounted_total_amount": 9.00,
+                "currency": "USD"
             }
 
 
@@ -263,237 +696,31 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 
 
+## V2 Pos Receipt Pictures [/v2/pos/receipt_pictures]
 
-# Group Pay with Miles
-
-## V1 Pos StartBonusPayment [/v1/pos/StartBonusPayment]
-
-### Start Mile Payment [POST]
-After getting customer info's and RecognitionID to start Payment with Miles Use this API.
-
-After calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.
+### Upload Receipt Pictures [POST]
+This endpoint will help you to upload receipt pictures which is related with a recognition ID and a transaction result.
 
 
 
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
+You can try this endoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
 
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
+
+You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df
+
+and OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c
 
 + Request (application/json)
-    + Attributes (StartMilePaymentRequest)
+    + Attributes (ReceiptPictureRequest)
 
 
 + Response 200 (application/json)
-    + Attributes (StartMilePaymentResponse)
+    + Attributes (ReceiptPictureResponse)
 
     + Body
 
-            {
-              "returnCode": 0,
-              "returnDesc": "",
-              "bonusPaymentProvisionId": "205",
-              "OTPNeeded": true
-            }
-
-
-+ Response 400 
-
-        Bad Request    - The request was unacceptable, often due to missing a required parameter.
-
-
-
-
-+ Response 401 
-
-        Unauthorized - No valid API key provided.
-
-
-
-
-+ Response 402 
-
-        Request Failed - The parameters were valid but the request failed.
-
-
-
-
-+ Response 404 
-
-        Not Found - The requested resource doesn't exist.
-
-
-
-
-+ Response 429 
-
-        Too Many Requests - Too many requests hit the API too quickly.
-
-
-
-
-+ Response 500 
-
-        Server Error - Something went wrong.
-
-
-
-
-
-## V1 Pos CompleteBonusPayment [/v1/pos/CompleteBonusPayment]
-
-### Complete Mile Payment [POST]
-In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.
-
-
-
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
-
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
-
-+ Request (application/json)
-    + Attributes (CompleteMilePaymentRequest)
-
-
-+ Response 200 (application/json)
-    + Attributes (CompleteMilePaymentResponse)
-
-    + Body
-
-            {
-              "returnCode": 0,
-              "returnDesc": ""
-            }
-
-
-+ Response 400 
-
-        Bad Request    - The request was unacceptable, often due to missing a required parameter.
-
-
-
-
-+ Response 401 
-
-        Unauthorized - No valid API key provided.
-
-
-
-
-+ Response 402 
-
-        Request Failed - The parameters were valid but the request failed.
-
-
-
-
-+ Response 404 
-
-        Not Found - The requested resource doesn't exist.
-
-
-
-
-+ Response 429 
-
-        Too Many Requests - Too many requests hit the API too quickly.
-
-
-
-
-+ Response 500 
-
-        Server Error - Something went wrong.
-
-
-
-
-
-## V1 Pos CancelBonusPayment [/v1/pos/CancelBonusPayment]
-
-### Cancel Mile Payment [POST]
-In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.
-
-
-
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
-
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
-
-+ Request (application/json)
-    + Attributes (CancelMilePaymentRequest)
-
-
-+ Response 200 (application/json)
-    + Attributes (CancelMilePaymentResponse)
-
-    + Body
-
-            {
-              "returnCode": 0,
-              "returnDesc": ""
-            }
-
-
-+ Response 400 
-
-        Bad Request    - The request was unacceptable, often due to missing a required parameter.
-
-
-
-
-+ Response 401 
-
-        Unauthorized - No valid API key provided.
-
-
-
-
-+ Response 402 
-
-        Request Failed - The parameters were valid but the request failed.
-
-
-
-
-+ Response 404 
-
-        Not Found - The requested resource doesn't exist.
-
-
-
-
-+ Response 429 
-
-        Too Many Requests - Too many requests hit the API too quickly.
-
-
-
-
-+ Response 500 
-
-        Server Error - Something went wrong.
-
-
-
-
-
-## V1 Pos GetBonusProvisions [/v1/pos/GetBonusProvisions]
-
-### Get Mile Provisions [POST]
-Before cancelling the payment with Miles this API is used to list the related sale.
-
-
-
-You can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66
-
-and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b
-
-+ Request (application/json)
-    + Attributes (GetMileProvisionsRequest)
-
-
-+ Response 200 (application/json)
-    + Attributes (GetBonusProvisionsResponse)
+            {"return_code":"0","return_desc":""}
 
 
 + Response 400 
@@ -542,56 +769,68 @@ and OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e33
 
 # Data Structures
 
-## CompleteMilePaymentResponse (object)
+## CompleteMilePaymentRequest (object)
 
 
 ### Properties
-+ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
++ `terminal_id`: `"A11708020243"` (string, required) - Terminal ID.
++ `otp`: `"3636"` (string, required) - One time password that sends to customer phone.
 
 
-## CancelMilePaymentResponse (object)
-
-
-### Properties
-+ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
-
-
-## GetMileProvisionsRequest (object)
+## StartMilePaymentResponse (object)
 
 
 ### Properties
-+ `readCode`: `"5929000000"` (string, required) - Customer Identification Method ; GSM NO, Customer Unique ID or CODE
-+ `readCodeType`: `"1"` (string, required) - 1: GSM NO, 2: Customer unique identifier, 3: CODE
-+ `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
++ `miles_payment_provision_id`: `205` (number, required) - Provision ID for the payment.
++ `otp_needed`: `true` (boolean, required) - Is a one-time password required?
 
 
-## GetBonusProvisionsResponse (object)
-
-
-### Properties
-+ `returnCode` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
-+ `bonusProvisions` (array[MileProvision], required) 
-
-
-## MileProvision (object)
+## Invoice (object)
 
 
 ### Properties
-+ `bonusPaymentProvisionId` (string, required) - Provision ID
-+ `usedBonusAmount` (number, required) - Used Bonus Amount
-+ `dateTime` (string, required) - Date/time
++ `invoice_type`: `0` (string, required) - Type of the invoice.
++ `invoice_number`: `17` (string, required) - Number of the invoice.
++ `invoice_date`: `11.07.2018` (string, required) - Date of the invoice.
 
 
-## OAuthRequest (object)
-Representing an OAuth request.
+## Payment (object)
+
 
 ### Properties
-+ `client_id`: `552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66` (string, required) - ID of the client which is provided by Global Miles.
-+ `client_secret`: `d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b` (string, required) - Secret of the client which is provided by Global Miles.
-+ `grant_type`: `client_credentials` (string, required) - Type of the OAuth flows. We support only one type of token: client_credentials
++ `pay_amount`: `10.00` (number, required) - Amount of the payment.
++ `payment_type`: `"100"` (string, required) - Type of the payment.
++ `miles_payment_provision_id`: `5` (number, optional) - Provision ID for pay with miles.
+
+
+## GetCustomerInfoResponse (object)
+
+
+### Properties
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
++ `recognition_id`: `197` (number, required) - Session based user identification number.
++ `available_miles_as_amount`: `3.50` (number, required) - The available miles as an amount that the customer can use in this transaction which is calculated from customer's current miles.
++ `loyalty_discounted_total_amount`: `9.00` (number, required) - Loyalty discounted total amount.
++ `currency`: `"USD"` (string, required) - ISO-4217 3-letter currency code.
+
+
+## Discount (object)
+
+
+### Properties
++ `origin`: `"1"` (string, required) - Origin of the discount. 1: Global Miles, 2: Other.
++ `type`: `"0"` (string, required) - Type of the discount. 0: amount based, 1: rate based.
++ `value`: `3.00` (number, required) - Value of the discount.
+
+
+## CancelMilePaymentRequest (object)
+
+
+### Properties
++ `terminal_id`: `"A11708020243"` (string, required) - Terminal ID.
 
 
 ## OAuthResponse (object)
@@ -603,113 +842,122 @@ Representing an OAuth response.
 + `created_at`: `1496737098` (string, required) - The time in unix time format when the access token was created.
 
 
+## OAuthRequest (object)
+Representing an OAuth request.
+
+### Properties
++ `client_id`: `b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df` (string, required) - ID of the client which is provided by Global Miles.
++ `client_secret`: `4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c` (string, required) - Secret of the client which is provided by Global Miles.
++ `grant_type`: `client_credentials` (string, required) - Type of the OAuth flows. We support only one type of token: client_credentials
+
+
+## MileProvision (object)
+
+
+### Properties
++ `miles_payment_provision_id`: `5` (number, required) - Provision ID
++ `used_miles_as_amount`: `12.00` (number, required) - Used amount
++ `currency`: `"USD"` (string, required) - ISO-4217 3-letter currency code.
++ `date_time`: `"2017-07-06T12:06:41.528Z"` (string, required) - Date time of the mile provision.
+
+
 ## TransactionResultRequest (object)
 
 
 ### Properties
-+ `totalReceiptAmount` (number, required) - Total Receipt Amount  ex:12.35 TL == 1235
-+ `totalVATAmount` (number, required) - Total VAT Amount  ex: 0.85 TL == 85
-+ `OKCSicilNo` (string, required) - Terminal code.
-+ `ReceiptNo` (number, required) - ReceiptNo
-+ `Zno` (number, required) - Z no
-+ `recognitionId` (number, required) - Session based Identification Number .
-+ `EkuNo` (number, required) - Eku no (Electronic Journal)
-+ `ReceiptType` (string, required) - Receipt Type (Invoice , Food ..)
-+ `ReceiptDateTime` (string, required) - It should be  GGAAYYYYSSDD formatted.
-+ `InvoiceInfo` (Invoice, required) - Invoice detail info
-+ `Payments` (array[Payment], required) - Payment Detail Block
-+ `Discounts` (array[Discount], required) 
++ `total_receipt_amount`: `20.00` (number, required) - Total receipt amount.
++ `total_vat_amount`: `5.00` (number, required) - Total tax amount.
++ `currency`: `USD` (string, required) - ISO-4217 3-letter currency code.
++ `partner_id`: `12` (number, required) - Partner ID.
++ `branch_id`: `17` (number, required) - Branch ID.
++ `terminal_id`: `A11708020243` (string, required) - Terminal ID.
++ `receipt_number`: `0007` (string, required) - Receipt number.
++ `extra_number_1`: `15` (string, required) - Extra number 1.
++ `extra_number_2`: `03` (string, required) - Extra number 2.
++ `recognition_id`: `197` (number, required) - Session based identification number.
++ `receipt_type`: `1` (string, required) - Receipt type (Invoice , Food ..)
++ `receipt_date_time`: `110720181530` (string, required) - It should be DDMMYYYYHHMM formatted.
++ `invoice_info`: `110720181530` (Invoice, optional) - Invoice details.
++ `payments`: `110720181530` (array[Payment], optional) - Payment details.
++ `discounts`: `110720181530` (array[Discount], optional) - Discount details.
++ `extra_data`: `""` (string, optional) - Extra data.
+
+
+## CancelMilePaymentResponse (object)
+
+
+### Properties
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message
+
+
+## CompleteMilePaymentResponse (object)
+
+
+### Properties
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
 
 
 ## StartMilePaymentRequest (object)
 
 
 ### Properties
-+ `totalReceiptAmount`: `300` (number, required) - Total Receipt Amount  ex:12.35 TL == 1235
-+ `usedBonusAmount`: `600` (number, required) - Used Amount that has been used in the shopping  ex:0.85 TL == 85
-+ `recognitionId`: `8` (number, required) - Session based user identification number
-+ `OKCSicilNo`: `8` (string, required) - Terminal code.
++ `total_receipt_amount`: `10.00` (number, required) - Total receipt amount.
++ `used_miles_as_amount`: `3.00` (number, required) - Used amount that has been used in the shopping.
++ `currency`: `"USD"` (string, required) - ISO-4217 3-letter currency code.
++ `recognition_id`: `197` (number, required) - Session based user identification number.
++ `terminal_id`: `"A11708020243"` (string, required) - Terminal ID.
 
 
-## CancelMilePaymentRequest (object)
-
-
-### Properties
-+ `bonusPaymentProvisionId`: `"206"` (string, required) - Provision ID
-+ `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
-
-
-## GetCustomerInfoResponse (object)
+## GetMileProvisionsResponse (object)
 
 
 ### Properties
-+ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
-+ `recognitionId`: `860444800` (number, required) - Session based user identification number
-+ `availablePoint`: `0` (number, required) - The available points that the customer can use in this transaction is in USD which is calculated from customer's current miles. EX: 12.56 USD == 1256
-+ `loyaltyDiscountedPrice`: `9000` (number, required) - Loyalty discounted price ex: 90.50 USD == 9050
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
++ `payment_provisions`: `""` (array[MileProvision], required) - A collection of the payments.
 
 
-## GetCustomerInfoRequest (object)
-
-
-### Properties
-+ `readCode`: `"5929000000"` (string, required) - Customer Identification Method ; GSM NO, Customer Unique ID or CODE
-+ `readCodeType`: `1` (number, required) - 1: GSM NO, 2: Customer unique identifier, 3: CODE
-+ `totalAmount`: `10000` (number, required) - Total receipt amount.  ex:12.34 USD == 1234
-+ `totalVATAmount`: `1000` (number, required) - Total Tax Value. EX:1.34 USD == 134
-+ `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
-
-
-## Discount (object)
+## GetTerminalInfoResponse (object)
 
 
 ### Properties
-+ `orijin` (string, required) 
-+ `type` (string, required) 
-+ `value` (string, required) 
-
-
-## Payment (object)
-
-
-### Properties
-+ `payAmount`: `2000` (number, required) 
-+ `paymentType`: `1` (number, required) 
-
-
-## Invoice (object)
-
-
-### Properties
-+ `invoiceType`: `0` (string, required) 
-+ `invoiceNo`: `17` (string, required) 
-+ `invoiceDate`: `15.04.2017` (string, required) 
++ `return_code`: `0` (number, required) - 0 Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
++ `terminal_id`: `A11708020243` (string, required) - Terminal ID.
++ `receipt_header`: `Earn Miles` (string, required) - Header text for the receipt.
++ `receipt_footer`: `Now join the world of Global Miles!` (string, required) - Footer text for the receipt.
++ `partner_id`: `12` (number, required) - Partner ID.
++ `branch_id`: `17` (number, required) - Branch ID.
++ `merchant_id_mandatory`: `true` (boolean, required) - Indicates whether the merchant ID parameter is required in the Transaction Result request.
++ `default_currency`: `USD` (string, required) - ISO-4217 3-letter default currency code for the partner.
 
 
 ## TransactionResultResponse (object)
 
 
 ### Properties
-+ `returnCode` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
++ `return_code`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
++ `qr_data`: `"I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f"` (string, required) - Text data to be used for printing the receipt.
++ `extra_info`: `""` (string, required) - Extra information for generel usage.
 
 
-## StartMilePaymentResponse (object)
-
-
-### Properties
-+ `returnCode`: `0` (number, required) - 0  Success, 1 and bigger than 1 unsuccessful
-+ `returnDesc` (string, required) - if success return is empty. if unsuccessful it returns error message
-+ `bonusPaymentProvisionId`: `"4"` (string, required) - Provision ID for the payment
-+ `OTPNeeded`: `true` (boolean, required) - Is a one-time password required?
-
-
-## CompleteMilePaymentRequest (object)
+## ReceiptPictureRequest (object)
 
 
 ### Properties
-+ `bonusPaymentProvisionId`: `"206"` (string, required) - Provision ID
-+ `OKCSicilNo`: `"JH20085055"` (string, required) - Terminal code.
-+ `OTP`: `"3636"` (string, required) - One time password that sends to customer phone
++ `terminal_id`: `A11708020243` (string, required) - Terminal ID.
++ `recognition_id`: `200` (number, required) - Session based user identification number.
++ `file_name`: `200_15899263622_01.png` (string, required) - File name of the picture.
++ `picture`: `iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAA4icSUVORK5CYII=` (string, required) - Base64 encoded binary picture data.
+
+
+## ReceiptPictureResponse (object)
+
+
+### Properties
++ `return_code`: `0` (string, required) - 0  Success, 1 and bigger than 1 unsuccessful.
++ `return_desc`: `""` (string, required) - if success return is empty. if unsuccessful it returns error message.
 

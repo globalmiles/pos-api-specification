@@ -1,19 +1,209 @@
-﻿{
+{
   "info": {
     "name": "Global Miles POS API",
-    "_postman_id": "525b7326-c05b-4cbf-8679-1b2b64021426",
-    "description": "By integrating GlobalMiles POS APIs, Merchants can offer to the GlobalMiles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key. Ask us Please.\nBefore using any APIS of us, you need to authorise by using your Client ID / Secret Key  to get access_token.  \nDuring shopping cashier ask GlobalMiles user  for  GSM No or QR code and enter into POS. \nPOS software Post this info to GlobalMiles Server by using the API  GetCustomerInfo and get uniq identifier in order to  use at TransactionResult API  if you follow EarnMiles work Flow or  use at  StartBonusPayment API if you follow Use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalise the payment, as the payment done at POS post TransactionResult .\n\nUse Your Mile(Bonus):\n\nAfter Getting Customer Info, As all the items added to basket, Cashier ask for the payment method as the Globalmiles selected as payment method, Pos software Post this info GlobalMiles Server by using the API  StartBonusPayment .\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Globalmiles server by the BonusComplete API.\n\nCancel Payment with Miles:\nBy using Get Bonus Provision & CancelBonusPayment APIs  it allows to  list related sale on the POS and Cancel it .",
+    "_postman_id": "4866fdb8-cdbb-4b69-99f1-20d6834a4054",
+    "description": "By integrating Global Miles POS APIs, Merchants can offer to the Global Miles users  earn mile and shop with their miles in their in-stores.\n\nWork Flow:\nCommon to dos both for Earn/Pay with miles. \n\nWe will provide Client ID/ Secret Key.\nBefore using any endpoints of us, you need to authorize by using your Client ID / Client Secret to get access_token. \nDuring shopping cashier ask GlobalMiles user for GSM / FFP ID / Code or EMail and enter into POS. \nPOS software Post this info to Global Miles Server by using the endpoint GetCustomerInfo and get unique identifier in order to use at TransactionResult endpoint if you follow EarnMiles work Flow or use at  StartMilePayment endpoint if you follow use your Miles work flow. \n\nEarn Mile: \nAfter Getting Customer Info, Cashier will finalize the payment, as the payment done at POS post TransactionResult.\n\nPay with Miles:\nAfter Getting Customer Info, as all the items added to basket, Cashier ask for the payment method as the Global Miles selected as payment method, Pos software Post this info Global Miles Server by using the endpoint StartMilePayment.\n\nAn OTP code is send to the Customer mobile phone. The Customer/cashier enter this OTP into POS and this info Post to Global Miles server by the CompleteMilePayment endpoint.\n\nCancel Payment with Miles:\nBy using Get Mile Provision & CancelMilePayment endpoints  it allows to  list related sale on the POS and Cancel it .",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/"
   },
   "item": [
     {
-      "name": "Earn Miles",
+      "name": "Pay with Miles",
       "item": [
         {
-          "id": "f860637c-c167-4989-9aa3-00f709b35e8f",
-          "name": "Transaction Result",
+          "id": "6b0fcb54-b796-44ad-a02a-bb843927f563",
+          "name": "Cancel Mile Payment",
           "request": {
-            "url": "http://default/v1/pos/TransactionResult",
+            "url": {
+              "protocol": "https",
+              "host": "api.sandbox.globalmiles.com",
+              "path": [
+                "v2/pos/payments/:miles_payment_provision_id"
+              ],
+              "variable": [
+                {
+                  "id": "miles_payment_provision_id",
+                  "value": "5",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": false
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"terminal_id\": \"A11708020243\"\r\n}"
+            },
+            "description": "In order to cancel payment with miles you can use this endpoint. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
+          },
+          "response": [
+            {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\"\r\n}",
+              "code": 200,
+              "name": "Response_200",
+              "id": "a1607e11-f03f-42e9-9c85-761929ca6f32"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "ce485f97-fe31-415a-9a02-fd1693851b6d"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "67353347-2b09-4d3a-b1c7-d5a5a6acd2d3"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "161f1626-ce1d-4ed0-91d7-191e9984885b"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "d016b930-202b-4003-9717-48a51da37244"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "fc0d1d67-858a-4b16-bf33-f0a83390cacf"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "8d4715ad-45ff-4240-985f-fd93eb84fef5"
+            }
+          ]
+        },
+        {
+          "id": "7a1158c9-33e0-4370-962c-aba0683a06ec",
+          "name": "Complete Mile Payment",
+          "request": {
+            "url": {
+              "protocol": "https",
+              "host": "api.sandbox.globalmiles.com",
+              "path": [
+                "v2/pos/payments/:miles_payment_provision_id"
+              ],
+              "variable": [
+                {
+                  "id": "miles_payment_provision_id",
+                  "value": "5",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": false
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"terminal_id\": \"A11708020243\",\r\n  \"otp\": \"3636\"\r\n}"
+            },
+            "description": "In order to finalize payment with miles use this endpoint. Use the OTP number which is send to user GSM on the Request body.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
+          },
+          "response": [
+            {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\"\r\n}",
+              "code": 200,
+              "name": "Response_200",
+              "id": "4ad910a9-31a7-4b1b-8cdc-3017bb6aaeda"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "9d086620-7894-4c33-98c0-8b067e11534a"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "3029dcf5-84bd-45ec-8b65-f57c45bd9e1f"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "0f8781f9-491d-44ff-a073-4f2cfea57e35"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "ca4d75da-29a3-4927-8fe7-90c5a8e07289"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "149e774d-c73b-4531-8b3b-afb951791042"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "d3894c57-3c44-4a1e-8e87-7cb58fa43d14"
+            }
+          ]
+        },
+        {
+          "id": "591a1146-3f55-484a-b399-b0a2292701ef",
+          "name": "Start Mile Payment",
+          "request": {
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/payments",
             "method": "POST",
             "header": [
               {
@@ -23,22 +213,147 @@
               },
               {
                 "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
+                "value": "application/json",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"totalReceiptAmount\": \"2000\",\r\n  \"totalVATAmount\": \"1000\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"ReceiptNo\": \"0007\",\r\n  \"Zno\": \"15\",\r\n  \"EkuNo\": \"03\",\r\n  \"recognitionId\": 197,\r\n  \"ReceiptType\": \"1\",\r\n  \"ReceiptDateTime\": \"150420171530\",\r\n  \"InvoiceInfo\": {\r\n    \"invoiceType\": \"0\",\r\n    \"invoiceNo\": \"17\",\r\n    \"invoiceDate\": \"15.04.2017\"\r\n  },\r\n  \"Payments\": [\r\n    {\r\n      \"payAmount\": \"2000\",\r\n      \"paymentType\": \"1\"\r\n    }\r\n  ],\r\n  \"Discounts\": [\r\n    {\r\n      \"orijin\": \"\",\r\n      \"type\": \"\",\r\n      \"value\": \"\"\r\n    }\r\n  ]\r\n}"
+              "raw": "{\r\n  \"total_receipt_amount\": 10.0,\r\n  \"used_miles_as_amount\": 3.0,\r\n  \"currency\": \"USD\",\r\n  \"recognition_id\": 197,\r\n  \"terminal_id\": \"A11708020243\"\r\n}"
             },
-            "description": "After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
+            "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this endpoint.\nAfter calling this endpoint successfully OTP code send to customer GSM number. This OTP must be used with Complete endpoint in order to complete payment.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
           },
           "response": [
             {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\",\r\n  \"miles_payment_provision_id\": 205,\r\n  \"otp_needed\": true\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "0103a676-a22a-4a66-8ab0-f3944d8eda45"
+              "id": "5749082a-324e-4f90-8643-6bdc7195a6ac"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "b8581581-ae87-42c4-ba0f-415aedcb3c0b"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "56790c1f-43b5-4f6a-92fd-9c2b8d4ed497"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "c01b0954-ca10-4212-908f-2e9ac1f81c6f"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "2537bd94-69b9-4ed4-8b1e-bfee47b2de1e"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "0101c981-3fe6-4a36-8701-035b00794e1b"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "67a0fae5-36ee-4538-a062-3a2de6004149"
+            }
+          ]
+        },
+        {
+          "id": "bd84d2b9-7bf9-4f8f-944c-22065e4ccab5",
+          "name": "Get Mile Provisions",
+          "request": {
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/payments?read_code=5929000000&read_code_type=1&terminal_id=A11708020243",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw"
+            },
+            "description": "Before cancelling the payment with miles this endpoint is used to list the related sale.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
+          },
+          "response": [
+            {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\",\r\n  \"payment_provisions\": [\r\n    {\r\n      \"miles_payment_provision_id\": 5,\r\n      \"used_miles_as_amount\": 12.0,\r\n      \"currency\": \"USD\",\r\n      \"date_time\": \"2017-07-06T12:06:41.528Z\"\r\n    },\r\n    {\r\n      \"miles_payment_provision_id\": 6,\r\n      \"used_miles_as_amount\": 17.0,\r\n      \"currency\": \"USD\",\r\n      \"date_time\": \"2017-07-06T12:06:48.263Z\"\r\n    }\r\n  ]\r\n}",
+              "code": 200,
+              "name": "Response_200",
+              "id": "6e0985f7-dd9d-42b3-9368-1cb705c40d4e"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "97cddb61-8533-40c4-80c9-d1bb7c473d42"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "5e7daf44-8754-4bfd-854d-75398d28c8bb"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "eff1cefc-d5a3-45a6-8ef8-44a4b124c539"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "ca28e6d4-4b88-44be-84ae-e7091cec7ef1"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "c355e13a-404f-4b9d-b8cd-34a178b097c0"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "38aba2f3-3412-4278-b9ea-96cb9d9d4036"
             }
           ]
         }
@@ -48,10 +363,10 @@
       "name": "Authentication",
       "item": [
         {
-          "id": "5ba0797e-4251-4c38-8387-577af460559a",
+          "id": "5c2a658e-e4c4-459e-a097-ea4ea59ca6d1",
           "name": "Authentication",
           "request": {
-            "url": "http://default/oauth/token",
+            "url": "https://api.sandbox.globalmiles.com/oauth/token",
             "auth": {
               "type": "noauth"
             },
@@ -64,22 +379,158 @@
               },
               {
                 "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
+                "value": "application/json",
                 "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"client_id\": \"552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\",\r\n  \"client_secret\": \"d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b\",\r\n  \"grant_type\": \"client_credentials\"\r\n}"
+              "raw": "{\r\n  \"client_id\": \"b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\",\r\n  \"client_secret\": \"4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c\",\r\n  \"grant_type\": \"client_credentials\"\r\n}"
             },
             "description": "An access token will allow you to make requests for the system. We support only one type of token: client_credentials"
           },
           "response": [
             {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
               "body": "{\r\n  \"access_token\": \"4a703ba19309b6197670e0606574cbe003bad856003fa36d31bce9a01b6b114c\",\r\n  \"token_type\": \"bearer\",\r\n  \"created_at\": \"1496737098\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "2d698d01-8cf9-42ee-8aba-33bf5786233c"
+              "id": "ff3481e3-3899-4851-b6b1-d6d48c9f071c"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "b7c01d7e-2864-4e54-809d-ffc12e7001f5"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "aadc5bd4-99a1-4401-8238-d0374db141e1"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "55265818-1c0d-4c1c-99d6-0a5cd4ceaf26"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "181adc0c-eace-48c0-a232-505e1b8d7ce7"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "9adb3f09-d322-45aa-b7b1-540d2cbabbda"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "824cde1d-8333-4f00-87af-bed231fd06f2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Earn Miles",
+      "item": [
+        {
+          "id": "4a0ff4de-9bed-4afd-8408-cb9adb535205",
+          "name": "Transaction Result",
+          "request": {
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/transaction_result",
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": false
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"total_receipt_amount\": 20.0,\r\n  \"total_vat_amount\": 1.18,\r\n  \"currency\": \"USD\",\r\n  \"partner_id\": 12,\r\n  \"branch_id\": 17,\r\n  \"terminal_id\": \"A11708020243\",\r\n  \"receipt_number\": \"0007\",\r\n  \"extra_number_1\": \"15\",\r\n  \"extra_number_2\": \"03\",\r\n  \"recognition_id\": 197,\r\n  \"receipt_type\": \"1\",\r\n  \"receipt_date_time\": \"110720181530\",\r\n  \"invoice_info\": {\r\n    \"invoice_type\": \"0\",\r\n    \"invoice_number\": \"17\",\r\n    \"invoice_date\": \"11.07.2018\"\r\n  },\r\n  \"payments\": [\r\n    {\r\n      \"pay_amount\": 10.0,\r\n      \"payment_type\": \"1\"\r\n    },\r\n    {\r\n      \"pay_amount\": 10.0,\r\n      \"payment_type\": \"100\",\r\n      \"miles_payment_provision_id\": 5\r\n    }\r\n  ],\r\n  \"discounts\": [\r\n    {\r\n      \"origin\": \"1\",\r\n      \"type\": \"0\",\r\n      \"value\": 3.0\r\n    }\r\n  ],\r\n  \"extra_data\": \"\"\r\n}"
+            },
+            "description": "After getting customer info by Get Customer Info endpoint and finished the shopping procedure in POS terminal, use this endpoint to complete transaction.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
+          },
+          "response": [
+            {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\",\r\n  \"qr_data\": \"I112042017114200000001000000JI2005368500030001001010100000001000e58de1f24e3f9e73772ad0b41f9c65f\",\r\n  \"extra_info\": \"\"\r\n}",
+              "code": 200,
+              "name": "Response_200",
+              "id": "76a5f710-fc51-4a5a-9c35-f495979173e1"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "cfe5fa09-6ed3-4f90-9c2a-e50a070978c4"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "7f9c10ef-7911-4488-83db-7bd1178fc862"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "5b96a7fa-8f1a-4150-86bb-2921a444a120"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "0973bdb2-8971-4622-8fdf-f07d64b9245a"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "eca23205-e860-4103-a507-ac28b7336ec1"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "75a62615-a4c0-41c5-bea4-4f0860e2a861"
             }
           ]
         }
@@ -89,114 +540,162 @@
       "name": "Common",
       "item": [
         {
-          "id": "0c63b290-6e37-46c0-bc17-5c6a7a81ad79",
+          "id": "db067ee5-5f95-4617-955a-0d9b72c44fad",
+          "name": "Get Terminal Info",
+          "request": {
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/terminal_info?terminal_id=A11708020243",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": false
+              }
+            ],
+            "body": {
+              "mode": "raw"
+            },
+            "description": "This endpoint will help you to get terminal settings in order to use internal operations.\n\nYou can try this endpoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
+          },
+          "response": [
+            {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\",\r\n  \"terminal_id\": \"A11708020243\",\r\n  \"receipt_header\": \"Earn Miles\",\r\n  \"receipt_footer\": \"Now join the world of Global Miles!\",\r\n  \"partner_id\": 12,\r\n  \"branch_id\": 17,\r\n  \"merchant_id_mandatory\": true,\r\n  \"default_currency\": \"USD\"\r\n}",
+              "code": 200,
+              "name": "Response_200",
+              "id": "81eda11b-f221-4efb-afcb-42765d00166f"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "018e5c63-3458-4e25-954d-9d4e7bc4fb1a"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "1cdfe996-0eb3-4067-856d-b6fe6144ae67"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "49f75746-c94d-43c8-9719-01c9722d2159"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "4c3bfe74-25f3-46ef-b484-63ee11ffb59d"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "de4f66ed-d127-41c1-b770-1ae1fc970c75"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "f77df4c3-82dc-439b-922f-b84d27b5137f"
+            }
+          ]
+        },
+        {
+          "id": "e94c73d9-4fd1-43ed-86c1-bf6489a837c2",
           "name": "Get Customer Info",
           "request": {
-            "url": "http://default/v1/pos/GetCustomerInfo",
-            "method": "POST",
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/customer_info?read_code=5929000000&read_code_type=1&total_amount=10.00&total_vat_amount=0.18&currency=USD&partner_id=12&branch_id=17&terminal_id=A11708020243",
+            "method": "GET",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json",
                 "disabled": false
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
-                "disabled": false
               }
             ],
             "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"readCode\": \"5929000000\",\r\n  \"readCodeType\": 1,\r\n  \"totalAmount\": 1000,\r\n  \"totalVATAmount\": 8,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
+              "mode": "raw"
             },
-            "description": "This API will help you to get customer's mil quantity and unique identifier value. Unique identifier value must be used by Transaction Result API in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
+            "description": "This endpoint will help you to get customer's miles amount as a currency and unique identifier value. Unique identifier value must be used by Transaction Result endpint in order to complete shopping.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
           },
           "response": [
             {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"recognitionId\": 197,\r\n  \"availablePoint\": 350,\r\n  \"loyaltyDiscountedPrice\": 1000\r\n}",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": 0,\r\n  \"return_desc\": \"\",\r\n  \"recognition_id\": 197,\r\n  \"available_miles_as_amount\": 3.5,\r\n  \"loyalty_discounted_total_amount\": 9.0,\r\n  \"currency\": \"USD\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "9268d673-6a8b-48bf-93c0-e37f83f3c986"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Pay with Miles",
-      "item": [
-        {
-          "id": "06b40b51-6adf-4483-af3e-b6b20648207d",
-          "name": "Start Mile Payment",
-          "request": {
-            "url": "http://default/v1/pos/StartBonusPayment",
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "disabled": false
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
-                "disabled": false
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"totalReceiptAmount\": 1000,\r\n  \"usedBonusAmount\": 300,\r\n  \"recognitionId\": 197,\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
+              "id": "edd721e6-5adc-4f67-a292-614326e4c794"
             },
-            "description": "After getting customer info's and RecognitionID to start Payment with Miles Use this API.\nAfter calling this API successfully OTP code send to customer GSM number. This OTP must be used with Complete API in order to complete sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
-          },
-          "response": [
             {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\",\r\n  \"bonusPaymentProvisionId\": \"205\",\r\n  \"OTPNeeded\": true\r\n}",
-              "code": 200,
-              "name": "Response_200",
-              "id": "59f76b40-b99a-4992-a467-7abe764cd779"
-            }
-          ]
-        },
-        {
-          "id": "db13e312-93a9-4336-825d-bb3754deb730",
-          "name": "Complete Mile Payment",
-          "request": {
-            "url": "http://default/v1/pos/CompleteBonusPayment",
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "disabled": false
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
-                "disabled": false
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"206\",\r\n  \"OKCSicilNo\": \"JH20085055\",\r\n  \"OTP\": \"3636\"\r\n}"
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "97783151-6393-40d3-8b24-bc9092157830"
             },
-            "description": "In order to finalize payment with Miles use this API. Use the OTP number  which is send to user GSM on the Request body.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
-          },
-          "response": [
             {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
-              "code": 200,
-              "name": "Response_200",
-              "id": "8d312596-ca47-462a-83eb-e6597dc46e91"
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "c89fcc2e-e947-42b1-af80-0edefe47209c"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "3d1e8326-165e-4efd-bf9a-a17cb598613e"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "94b1945d-f1aa-47cd-bdaf-bdb8272433e3"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "679f22d9-a35f-4a0c-93a7-f0561e545f5e"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "33f5f559-402e-4102-be71-d0757570b2e2"
             }
           ]
         },
         {
-          "id": "0383bfb7-09fc-40e6-95a6-dba290a23b6f",
-          "name": "Cancel Mile Payment",
+          "id": "3e7ebf8b-1d89-4671-812e-fc4d7d67bfc0",
+          "name": "Upload Receipt Pictures",
           "request": {
-            "url": "http://default/v1/pos/CancelBonusPayment",
+            "url": "https://api.sandbox.globalmiles.com/v2/pos/receipt_pictures",
             "method": "POST",
             "header": [
               {
@@ -206,54 +705,71 @@
               },
               {
                 "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
-                "disabled": false
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"bonusPaymentProvisionId\": \"206\",\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
-            },
-            "description": "In order to cancel payment with miles you can use this API. It allows to cancel payment only related GSM and terminal ID numbers.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
-          },
-          "response": [
-            {
-              "body": "{\r\n  \"returnCode\": 0,\r\n  \"returnDesc\": \"\"\r\n}",
-              "code": 200,
-              "name": "Response_200",
-              "id": "3c64ae66-0987-4d5c-9008-87c2da035036"
-            }
-          ]
-        },
-        {
-          "id": "b7a47646-2770-4d56-913a-a356d5ffe611",
-          "name": "Get Mile Provisions",
-          "request": {
-            "url": "http://default/v1/pos/GetBonusProvisions",
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
                 "value": "application/json",
                 "disabled": false
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json;charset=utf-8",
-                "disabled": false
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"readCode\": \"5929000000\",\r\n  \"readCodeType\": \"1\",\r\n  \"OKCSicilNo\": \"JH20085055\"\r\n}"
+              "raw": "{\r\n  \"terminal_id\": \"A11708020243\",\r\n  \"recognition_id\": 200,\r\n  \"file_name\": \"200_15899263622_01.png\",\r\n  \"picture\": \"iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAA4icSUVORK5CYII=\"\r\n}"
             },
-            "description": "Before cancelling the payment with Miles this API is used to list the related sale.\n\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is 552698b91cae424b9b3ddee14eea6faf564f1b5fb7764854b73b2763e0e68c66\nand OAuthClientSecret is d0a8b00a3d754ea5a013465bcc23f6efa89e9dfb080a4f4eb460e3306653d92b"
+            "description": "This endpoint will help you to upload receipt pictures which is related with a recognition ID and a transaction result.\n\nYou can try this endoint with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c\nYou can try this API with configuring client parameters in Console Tab below. Test OAuthClientId is b30359c21700fd6f2b91154adcb7b37bab3e7e0a33e22682e5dd149d7a6ac4df\nand OAuthClientSecret is 4bc4335faad41d6a23cd059e495005f00496a64e34e6187b1d72695a8debd28c"
           },
           "response": [
             {
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "disabled": false
+                }
+              ],
+              "body": "{\r\n  \"return_code\": \"0\",\r\n  \"return_desc\": \"\"\r\n}",
               "code": 200,
               "name": "Response_200",
-              "id": "6e09a350-cc17-4dc8-8a4a-65ca3f5d70aa"
+              "id": "803d0734-50a2-438c-a433-729698606ef5"
+            },
+            {
+              "body": "error 400",
+              "status": "Bad Request\t- The request was unacceptable, often due to missing a required parameter.",
+              "code": 400,
+              "name": "Response_400",
+              "id": "96417e6c-002b-4018-821b-2db5d129afe3"
+            },
+            {
+              "body": "error 401",
+              "status": "Unauthorized - No valid API key provided.",
+              "code": 401,
+              "name": "Response_401",
+              "id": "9c82499c-e3e3-424d-9f64-046c3230bf49"
+            },
+            {
+              "body": "error 402",
+              "status": "Request Failed - The parameters were valid but the request failed.",
+              "code": 402,
+              "name": "Response_402",
+              "id": "ac6f4df2-2fdc-4d11-be03-ea0cc76b13c5"
+            },
+            {
+              "body": "error 404",
+              "status": "Not Found - The requested resource doesn't exist.",
+              "code": 404,
+              "name": "Response_404",
+              "id": "2d5c6fa3-d02d-477f-8779-fb8c11b04238"
+            },
+            {
+              "body": "error 429",
+              "status": "Too Many Requests - Too many requests hit the API too quickly.",
+              "code": 429,
+              "name": "Response_429",
+              "id": "44f1ef8a-b17b-4cb7-beb9-646ec0717b2f"
+            },
+            {
+              "body": "error 500",
+              "status": "Server Error - Something went wrong.",
+              "code": 500,
+              "name": "Response_500",
+              "id": "83c7c0a9-7e8b-4367-95ab-366017c6b323"
             }
           ]
         }
